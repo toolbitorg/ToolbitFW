@@ -1,6 +1,7 @@
 /*
  * USB HID Simple based on HID Mouse
  */
+
 /*
  * USB HID Mouse
  *
@@ -43,42 +44,30 @@ int main(void)
 #endif
 	usb_init();
 
-	/* Setup mouse movement. This implementation sends back data for every
-	 * IN packet, but sends no movement for all but every delay-th frame.
-	 * Adjusting delay will slow down or speed up the movement, which is
-	 * also dependent upon the rate at which the host sends IN packets,
-	 * which varies between implementations.
-	 *
-	 * In real life, you wouldn't want to send back data that hadn't
-	 * changed, but since there's no real hardware to poll, and since this
-	 * example is about showing the HID class, and not about creative ways
-	 * to do timing, we send back data every frame. The interested reader
-	 * may want to modify it to use the start-of-frame callback for
-	 * timing.
-	 */
-	uint8_t x_count = 100;
-	uint8_t delay = 7;
-	int8_t x_direc = 1;
-
 	while (1) {
-		if (usb_is_configured() &&
-		    !usb_in_endpoint_halted(1) &&
-		    !usb_in_endpoint_busy(1)) {
+        if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
+            uint8_t len;
+            const unsigned char *RxDataBuffer;
+            unsigned char *TxDataBuffer = usb_get_in_buffer(1);
+            /* Data received from host */
+            
+            if (!usb_in_endpoint_halted(1)) {
+				/* Wait for EP 1 IN to become free then send. This of
+				 * course only works using interrupts. */
+				while (usb_in_endpoint_busy(1))
+					;
 
-			unsigned char *buf = usb_get_in_buffer(1);
-			buf[0] = 0x0;
-			buf[1] = (--delay)? 0: x_direc;
-			buf[2] = 0;
-			usb_send_in_buffer(1, 3);
-
-			if (delay == 0) {
-				if (--x_count == 0) {
-					x_count = 100;
-					x_direc *= -1;
-				}
-				delay = 7;
+				len = usb_get_out_buffer(1, &RxDataBuffer);
+                TxDataBuffer[0] = RxDataBuffer[0];  // echo back
+                TxDataBuffer[1] = 'a';              // send sample data
+                TxDataBuffer[2] = 'b';
+                TxDataBuffer[3] = 'c';
+                TxDataBuffer[4] = '\0';    
+				memcpy(usb_get_in_buffer(1), TxDataBuffer, EP_1_IN_LEN);
+				usb_send_in_buffer(1, len);
 			}
-		}
+			usb_arm_out_endpoint(1);
+        }
 
 		#ifndef USB_USE_INTERRUPTS
 		usb_service();

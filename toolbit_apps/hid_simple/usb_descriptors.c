@@ -80,45 +80,32 @@ const ROMPTR struct device_descriptor this_device_descriptor =
 	0x00, // Device Subclass
 	0x00, // Protocol.
 	EP_0_LEN, // bMaxPacketSize0
-	0xA0A0, // Vendor
-	0x0003, // Product
-	0x0001, // device release (1.0)
+	0x04D8, // Vendor
+	0x003F, // Product
+	0x0003, // device release (1.0)
 	1, // Manufacturer
 	2, // Product
 	0, // Serial
 	NUMBER_OF_CONFIGURATIONS // NumConfigurations
 };
 
-/* HID Report descriptor. See the HID specification for more deatils. This
- * is the mouse example from the "HID Descriptor Tool" which can be downloaded
- * from USB.org. */
-static const ROMPTR uint8_t mouse_report_descriptor[] = {
-   0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
-    0x09, 0x02,                    // USAGE (Mouse)
-    0xa1, 0x01,                    // COLLECTION (Application)
-    0x09, 0x01,                    //   USAGE (Pointer)
-    0xa1, 0x00,                    //   COLLECTION (Physical)
-    0x05, 0x09,                    //     USAGE_PAGE (Button)
-    0x19, 0x01,                    //     USAGE_MINIMUM (Button 1)
-    0x29, 0x03,                    //     USAGE_MAXIMUM (Button 3)
-    0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
-    0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
-    0x95, 0x03,                    //     REPORT_COUNT (3)
-    0x75, 0x01,                    //     REPORT_SIZE (1)
-    0x81, 0x02,                    //     INPUT (Data,Var,Abs)
-    0x95, 0x01,                    //     REPORT_COUNT (1)
-    0x75, 0x05,                    //     REPORT_SIZE (5)
-    0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
-    0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
-    0x09, 0x30,                    //     USAGE (X)
-    0x09, 0x31,                    //     USAGE (Y)
-    0x15, 0x81,                    //     LOGICAL_MINIMUM (-127)
-    0x25, 0x7f,                    //     LOGICAL_MAXIMUM (127)
-    0x75, 0x08,                    //     REPORT_SIZE (8)
-    0x95, 0x02,                    //     REPORT_COUNT (2)
-    0x81, 0x06,                    //     INPUT (Data,Var,Rel)
-    0xc0,                          //   END_COLLECTION
-    0xc0                           // END_COLLECTION
+/* HID Report descriptor */
+static const ROMPTR uint8_t custom_report_descriptor[] =
+{
+    0x06, 0x00, 0xFF,       // Usage Page = 0xFF00 (Vendor Defined Page 1)
+    0x09, 0x01,             // Usage (Vendor Usage 1)
+    0xA1, 0x01,             // Collection (Application)
+    0x19, 0x01,             //      Usage Minimum 
+    0x29, 0x40,             //      Usage Maximum 	//64 input usages total (0x01 to 0x40)
+    0x15, 0x01,             //      Logical Minimum (data bytes in the report may have minimum value = 0x00)
+    0x25, 0x40,      	  	//      Logical Maximum (data bytes in the report may have maximum value = 0x00FF = unsigned 255)
+    0x75, 0x08,             //      Report Size: 8-bit field size
+    0x95, 0x40,             //      Report Count: Make sixty-four 8-bit fields (the next time the parser hits an "Input", "Output", or "Feature" item)
+    0x81, 0x00,             //      Input (Data, Array, Abs): Instantiates input packet fields based on the above report size, count, logical min/max, and usage.
+    0x19, 0x01,             //      Usage Minimum 
+    0x29, 0x40,             //      Usage Maximum 	//64 output usages total (0x01 to 0x40)
+    0x91, 0x00,             //      Output (Data, Array, Abs): Instantiates output packet fields.  Uses same report size and count as "Input" fields, since nothing new/different was specified to the parser since the "Input" item.
+    0xC0                    // End Collection
 };
 
 /* Configuration Packet Instance
@@ -139,7 +126,7 @@ static const ROMPTR struct configuration_1_packet configuration_1 =
 	sizeof(configuration_1), // wTotalLength (length of the whole packet)
 	1, // bNumInterfaces
 	1, // bConfigurationValue
-	2, // iConfiguration (index of string descriptor)
+	0, // iConfiguration (index of string descriptor)
 	0b10000000,
 	100/2,   // 100/2 indicates 100mA
 	},
@@ -153,8 +140,8 @@ static const ROMPTR struct configuration_1_packet configuration_1 =
 	0x2, // bNumEndpoints (num besides endpoint 0)
 	HID_INTERFACE_CLASS, // bInterfaceClass 3=HID, 0xFF=VendorDefined
 	0x00, // bInterfaceSubclass (0=NoBootInterface for HID)
-	0x00, // bInterfaceProtocol
-	0x02, // iInterface (index of string describing interface)
+	0x00, // bInterfaceProtocol (HID Custom Protocol)
+	0x00, // iInterface (index of string describing interface)
 	},
 
 	{
@@ -165,7 +152,7 @@ static const ROMPTR struct configuration_1_packet configuration_1 =
 	0x0, // bCountryCode
 	1,   // bNumDescriptors
 	DESC_REPORT, // bDescriptorType2
-	sizeof(mouse_report_descriptor), // wDescriptorLength
+	sizeof(custom_report_descriptor), // wDescriptorLength
 	},
 
 	{
@@ -207,16 +194,16 @@ static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t la
 	0x0409 // US English
 };
 
-static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[23]; } vendor_string = {
+static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } vendor_string = {
 	sizeof(vendor_string),
 	DESC_STRING,
-	{'S','i','g','n','a','l',' ','1','1',' ','S','o','f','t','w','a','r','e',' ','L','L','C','.'}
+	{'t','o','o','l','b','i','t','.','o','r','g'}
 };
 
-static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[14]; } product_string = {
+static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[15]; } product_string = {
 	sizeof(product_string),
 	DESC_STRING,
-	{'U','S','B',' ','M','o','u','s','e',' ','D','e','m','o'}
+	{'U','S','B',' ','C','o','s','t','o','m',' ','D','e','m','o'}
 };
 
 static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } interface_string = {
@@ -289,6 +276,6 @@ int16_t usb_application_get_hid_descriptor(uint8_t interface, const void **ptr)
 /** HID Report Descriptor Function */
 int16_t usb_application_get_hid_report_descriptor(uint8_t interface, const void **ptr)
 {
-	*ptr = mouse_report_descriptor;
-	return sizeof(mouse_report_descriptor);
+	*ptr = custom_report_descriptor;
+	return sizeof(custom_report_descriptor);
 }
