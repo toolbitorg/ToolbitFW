@@ -1,4 +1,7 @@
 /*
+ * USB HID Simple based on HID Mouse
+ */
+/*
  * USB HID Mouse
  *
  * This file may be used by anyone for any purpose and may be used as a
