@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Toolbit/firmware/workspace/m-stack/apps/hid_simple/main.c</file>
+            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/hid_simple/main.c</file>
+            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/common/hardware.c</file>
+            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/hid_simple/usb_config.h</file>
+            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/hid_simple/usb_descriptors.c</file>
         </group>
     </open-files>
 </project-private>

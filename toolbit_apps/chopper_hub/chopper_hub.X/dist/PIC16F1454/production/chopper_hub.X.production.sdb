@@ -1,0 +1,1144 @@
+[p LITE_MODE AUTOSTATIC PIC14 PIC14E ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip 16F1454 ]
+[d frameptr 6 ]
+"867 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[e E2330 StandardControlRequest `uc
+GET_STATUS 0
+CLEAR_FEATURE 1
+SET_FEATURE 3
+SET_ADDRESS 5
+GET_DESCRIPTOR 6
+SET_DESCRIPTOR 7
+GET_CONFIGURATION 8
+SET_CONFIGURATION 9
+GET_INTERFACE 10
+SET_INTERFACE 11
+SYNCH_FRAME 12
+]
+"871
+[e E2342 DescriptorTypes `uc
+DESC_DEVICE 1
+DESC_CONFIGURATION 2
+DESC_STRING 3
+DESC_INTERFACE 4
+DESC_ENDPOINT 5
+DESC_DEVICE_QUALIFIER 6
+DESC_OTHER_SPEED_CONFIGURATION 7
+DESC_INTERFACE_POWER 8
+DESC_OTG 9
+DESC_DEBUG 10
+DESC_INTERFACE_ASSOCIATION 11
+]
+"1205
+[e E2325 RequestType `uc
+REQUEST_TYPE_STANDARD 0
+REQUEST_TYPE_CLASS 1
+REQUEST_TYPE_VENDOR 2
+REQUEST_TYPE_RESERVED 3
+]
+"1436
+[e E2302 PID `uc
+PID_OUT 1
+PID_IN 9
+PID_SOF 5
+PID_SETUP 13
+PID_DATA0 3
+PID_DATA1 11
+PID_DATA2 7
+PID_MDATA 15
+PID_ACK 2
+PID_NAK 10
+PID_STALL 14
+PID_NYET 6
+PID_PRE 12
+PID_ERR 12
+PID_SPLIT 8
+PID_PING 4
+PID_RESERVED 0
+]
+"73 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb_hid.c
+[e E57 StandardControlRequest `uc
+GET_STATUS 0
+CLEAR_FEATURE 1
+SET_FEATURE 3
+SET_ADDRESS 5
+GET_DESCRIPTOR 6
+SET_DESCRIPTOR 7
+GET_CONFIGURATION 8
+SET_CONFIGURATION 9
+GET_INTERFACE 10
+SET_INTERFACE 11
+SYNCH_FRAME 12
+]
+"79
+[e E352 HIDDescriptorTypes `uc
+DESC_HID 33
+DESC_REPORT 34
+DESC_PHYSICAL 35
+]
+"106
+[e E356 HIDRequests `uc
+HID_GET_REPORT 1
+HID_GET_IDLE 2
+HID_GET_PROTOCOL 3
+HID_SET_REPORT 9
+HID_SET_IDLE 10
+HID_SET_PROTOCOL 11
+]
+"77 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/usb_descriptors.c
+[e E266 DescriptorTypes `uc
+DESC_DEVICE 1
+DESC_CONFIGURATION 2
+DESC_STRING 3
+DESC_INTERFACE 4
+DESC_ENDPOINT 5
+DESC_DEVICE_QUALIFIER 6
+DESC_OTHER_SPEED_CONFIGURATION 7
+DESC_INTERFACE_POWER 8
+DESC_OTG 9
+DESC_DEBUG 10
+DESC_INTERFACE_ASSOCIATION 11
+]
+"150
+[e E352 HIDDescriptorTypes `uc
+DESC_HID 33
+DESC_REPORT 34
+DESC_PHYSICAL 35
+]
+"163
+[e E283 EndpointAttributes `uc
+EP_CONTROL 0
+EP_ISOCHRONOUS 1
+EP_BULK 2
+EP_INTERRUPT 3
+]
+"70 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[e E2467 . `uc
+OP_GET_ATTR_VALUE 16
+OP_SET_ATTR_VALUE 17
+]
+"74
+[e E2471 . `uc
+ATTR_PRODUCT_NAME 0
+ATTR_PRODUCT_REVISION 1
+ATTR_PRODUCT_SERIAL 2
+ATTR_FIRM_VERSION 3
+]
+"456 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _pic16_linear_addr pic16_linear_addr `(ui  1 s 2 pic16_linear_addr ]
+[v i1_pic16_linear_addr pic16_linear_addr `(ui  1 s 2 i1_pic16_linear_addr ]
+"474
+[v _reset_ep0_data_stage reset_ep0_data_stage `(v  1 s 1 reset_ep0_data_stage ]
+[v i1_reset_ep0_data_stage reset_ep0_data_stage `(v  1 s 1 i1_reset_ep0_data_stage ]
+"495
+[v _init_endpoints init_endpoints `(v  1 s 1 init_endpoints ]
+[v i1_init_endpoints init_endpoints `(v  1 s 1 i1_init_endpoints ]
+"561
+[v _usb_init usb_init `(v  1 e 1 0 ]
+[v i1_usb_init usb_init `(v  1 e 1 0 ]
+"692
+[v _reset_bd0_out reset_bd0_out `(v  1 s 1 reset_bd0_out ]
+"704
+[v _stall_ep0 stall_ep0 `(v  1 s 1 stall_ep0 ]
+"717
+[v _clear_ep0_stall clear_ep0_stall `(v  1 s 1 clear_ep0_stall ]
+"731
+[v _stall_ep_in stall_ep_in `(v  1 s 1 stall_ep_in ]
+"742
+[v _stall_ep_out stall_ep_out `(v  1 s 1 stall_ep_out ]
+"753
+[v _send_zero_length_packet_ep0 send_zero_length_packet_ep0 `(v  1 s 1 send_zero_length_packet_ep0 ]
+"766
+[v _usb_send_in_buffer_0 usb_send_in_buffer_0 `(v  1 s 1 usb_send_in_buffer_0 ]
+"837
+[v _start_control_return start_control_return `(v  1 s 1 start_control_return ]
+"852
+[v _handle_standard_control_request handle_standard_control_request `T(c  1 s 1 handle_standard_control_request ]
+"1149
+[v _handle_ep0_setup handle_ep0_setup `T(v  1 s 1 handle_ep0_setup ]
+"1263
+[v _handle_ep0_out handle_ep0_out `T(v  1 s 1 handle_ep0_out ]
+"1346
+[v _handle_ep0_in handle_ep0_in `T(v  1 s 1 handle_ep0_in ]
+"1391
+[v _usb_service usb_service `(v  1 e 1 0 ]
+"1508
+[v _usb_get_configuration usb_get_configuration `(uc  1 e 1 0 ]
+"1513
+[v _usb_get_in_buffer usb_get_in_buffer `(*.2uc  1 e 1 0 ]
+"1525
+[v _usb_send_in_buffer usb_send_in_buffer `(v  1 e 1 0 ]
+"1567
+[v _usb_in_endpoint_busy usb_in_endpoint_busy `(uc  1 e 1 0 ]
+"1577
+[v _usb_halt_ep_in usb_halt_ep_in `(uc  1 e 1 0 ]
+"1588
+[v _usb_in_endpoint_halted usb_in_endpoint_halted `(uc  1 e 1 0 ]
+[v i1_usb_in_endpoint_halted usb_in_endpoint_halted `(uc  1 e 1 0 ]
+"1593
+[v _usb_get_out_buffer usb_get_out_buffer `(uc  1 e 1 0 ]
+"1610
+[v _usb_out_endpoint_has_data usb_out_endpoint_has_data `(uc  1 e 1 0 ]
+"1620
+[v _usb_arm_out_endpoint usb_arm_out_endpoint `(v  1 e 1 0 ]
+"1655
+[v _usb_halt_ep_out usb_halt_ep_out `(uc  1 e 1 0 ]
+"1682
+[v _usb_send_data_stage usb_send_data_stage `(v  1 e 1 0 ]
+"50 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb_hid.c
+[v _process_hid_setup_request process_hid_setup_request `(uc  1 e 1 0 ]
+"202 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps/common/hardware.c
+[v _hardware_init hardware_init `(v  1 e 1 0 ]
+"39 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _main main `(i  1 e 2 0 ]
+"133
+[v _app_set_configuration_callback app_set_configuration_callback `(v  1 e 1 0 ]
+"138
+[v _app_get_device_status_callback app_get_device_status_callback `(ui  1 e 2 0 ]
+"143
+[v _app_endpoint_halt_callback app_endpoint_halt_callback `(v  1 e 1 0 ]
+"148
+[v _app_set_interface_callback app_set_interface_callback `(c  1 e 1 0 ]
+"153
+[v _app_get_interface_callback app_get_interface_callback `(c  1 e 1 0 ]
+"158
+[v _app_out_transaction_callback app_out_transaction_callback `(v  1 e 1 0 ]
+"163
+[v _app_in_transaction_complete_callback app_in_transaction_complete_callback `(v  1 e 1 0 ]
+"168
+[v _app_unknown_setup_request_callback app_unknown_setup_request_callback `(c  1 e 1 0 ]
+"181
+[v _app_unknown_get_descriptor_callback app_unknown_get_descriptor_callback `(i  1 e 2 0 ]
+"186
+[v _app_start_of_frame_callback app_start_of_frame_callback `(v  1 e 1 0 ]
+"191
+[v _app_usb_reset_callback app_usb_reset_callback `(v  1 e 1 0 ]
+"200
+[v _get_report_callback get_report_callback `(c  1 s 1 get_report_callback ]
+"208
+[v _app_get_report_callback app_get_report_callback `(i  1 e 2 0 ]
+"227
+[v _app_set_report_callback app_set_report_callback `(c  1 e 1 0 ]
+"237
+[v _app_get_idle_callback app_get_idle_callback `(uc  1 e 1 0 ]
+"242
+[v _app_set_idle_callback app_set_idle_callback `(c  1 e 1 0 ]
+"248
+[v _app_get_protocol_callback app_get_protocol_callback `(c  1 e 1 0 ]
+"253
+[v _app_set_protocol_callback app_set_protocol_callback `(c  1 e 1 0 ]
+"260
+[v _isr isr `II(v  1 e 1 0 ]
+"225 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/usb_descriptors.c
+[v _usb_application_get_string usb_application_get_string `(i  1 e 2 0 ]
+"267
+[v _usb_application_get_hid_descriptor usb_application_get_hid_descriptor `(i  1 e 2 0 ]
+"277
+[v _usb_application_get_hid_report_descriptor usb_application_get_hid_report_descriptor `(i  1 e 2 0 ]
+"62 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\float.c
+[v ___ftpack __ftpack `(f  1 e 3 0 ]
+"86 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\ftadd.c
+[v ___ftadd __ftadd `(f  1 e 3 0 ]
+"8 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\memset.c
+[v _memset memset `(*.39v  1 e 1 0 ]
+[v i1_memset memset `(*.39v  1 e 1 0 ]
+"4 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\strlen.c
+[v _strlen strlen `(ui  1 e 2 0 ]
+"15 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\Umul16.c
+[v ___wmul __wmul `(ui  1 e 2 0 ]
+[v i1___wmul __wmul `(ui  1 e 2 0 ]
+"4 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\Umul8.c
+[v ___bmul __bmul `(uc  1 e 1 0 ]
+[v i1___bmul __bmul `(uc  1 e 1 0 ]
+[s S19 . 1 `uc 1 BC8 1 0 :1:0 
+`uc 1 BC9 1 0 :1:1 
+`uc 1 PID 1 0 :4:2 
+`uc 1 reserved 1 0 :1:6 
+`uc 1 UOWN 1 0 :1:7 
+]
+"200 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[s S25 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 . 1 0 :1:1 
+`uc 1 BSTALL 1 0 :1:2 
+`uc 1 DTSEN 1 0 :1:3 
+`uc 1 INCDIS 1 0 :1:4 
+`uc 1 KEN 1 0 :1:5 
+`uc 1 DTS 1 0 :1:6 
+`uc 1 . 1 0 :1:7 
+]
+[u S34 . 1 `S19 1 . 1 0 `S25 1 . 1 0 `uc 1 BDnSTAT 1 0 ]
+[s S38 buffer_descriptor 4 `S34 1 STAT 1 0 `uc 1 BDnCNT 1 1 `ui 1 BDnADR 2 2 ]
+[v _bds bds `[4]S38  1 s 16 bds ]
+[s S46 . 144 `[1][8]uc 1 ep_0_out_buf 8 0 `[1][8]uc 1 ep_0_in_buf 8 8 `[1][64]uc 1 ep_1_out_buf 64 16 `[1][64]uc 1 ep_1_in_buf 64 80 ]
+"298
+[v _ep_buffers ep_buffers `S46  1 s 144 ep_buffers ]
+[s S53 ep0_buf 5 `DCC*.39uc 1 out 2 0 `DCC*.39uc 1 in 2 2 `uc 1 flags 1 4 ]
+"372
+[v _ep0_buf ep0_buf `S53  1 s 5 ep0_buf ]
+[s S59 ep_buf 7 `DCC*.2uc 1 out 2 0 `DCC*.2uc 1 in 2 2 `DCCuc 1 out_len 1 4 `DCCuc 1 in_len 1 5 `uc 1 flags 1 6 ]
+"374
+[v _ep_buf ep_buf `[2]S59  1 s 14 ep_buf ]
+"430
+[v _addr_pending addr_pending `uc  1 s 1 addr_pending ]
+"431
+[v _addr addr `uc  1 s 1 addr ]
+"432
+[v _g_configuration g_configuration `uc  1 s 1 g_configuration ]
+"433
+[v _control_need_zlp control_need_zlp `uc  1 s 1 control_need_zlp ]
+"434
+[v _returning_short returning_short `uc  1 s 1 returning_short ]
+"437
+[v _ep0_data_stage_callback ep0_data_stage_callback `*.37(c  1 s 2 ep0_data_stage_callback ]
+"438
+[v _ep0_data_stage_in_buffer ep0_data_stage_in_buffer `*.26uc  1 s 2 ep0_data_stage_in_buffer ]
+"439
+[v _ep0_data_stage_out_buffer ep0_data_stage_out_buffer `*.1uc  1 s 1 ep0_data_stage_out_buffer ]
+"440
+[v _ep0_data_stage_buf_remaining ep0_data_stage_buf_remaining `ui  1 s 2 ep0_data_stage_buf_remaining ]
+"441
+[v _ep0_data_stage_context ep0_data_stage_context `*.1v  1 s 1 ep0_data_stage_context ]
+"442
+[v _ep0_data_stage_direc ep0_data_stage_direc `uc  1 s 1 ep0_data_stage_direc ]
+"35 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/attribution.h
+[v _PRODUCT_NAME PRODUCT_NAME `DCC[12]uc  1 s 12 PRODUCT_NAME ]
+"36
+[v _PRODUCT_REVISION PRODUCT_REVISION `DCC[4]uc  1 s 4 PRODUCT_REVISION ]
+"37
+[v _PRODUCT_SERIAL PRODUCT_SERIAL `DCC[7]uc  1 s 7 PRODUCT_SERIAL ]
+"38
+[v _FIRM_VERSION FIRM_VERSION `DCC[4]uc  1 s 4 FIRM_VERSION ]
+"198 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _report_buf report_buf `[3]uc  1 s 3 report_buf ]
+[s S233 device_descriptor 18 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `ui 1 bcdUSB 2 2 `uc 1 bDeviceClass 1 4 `uc 1 bDeviceSubclass 1 5 `uc 1 bDeviceProtocol 1 6 `uc 1 bMaxPacketSize0 1 7 `ui 1 idVendor 2 8 `ui 1 idProduct 2 10 `ui 1 bcdDevice 2 12 `uc 1 iManufacturer 1 14 `uc 1 iProduct 1 15 `uc 1 iSerialNumber 1 16 `uc 1 bNumConfigurations 1 17 ]
+"74 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/usb_descriptors.c
+[v _this_device_descriptor this_device_descriptor `DCCS233  1 e 18 0 ]
+"93
+[v _custom_report_descriptor custom_report_descriptor `DCC[28]uc  1 s 28 custom_report_descriptor ]
+[s S263 configuration_descriptor 9 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `ui 1 wTotalLength 2 2 `uc 1 bNumInterfaces 1 4 `uc 1 bConfigurationValue 1 5 `uc 1 iConfiguration 1 6 `uc 1 bmAttributes 1 7 `uc 1 bMaxPower 1 8 ]
+"120
+[s S888 interface_descriptor 9 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `uc 1 bInterfaceNumber 1 2 `uc 1 bAlternateSetting 1 3 `uc 1 bNumEndpoints 1 4 `uc 1 bInterfaceClass 1 5 `uc 1 bInterfaceSubclass 1 6 `uc 1 bInterfaceProtocol 1 7 `uc 1 iInterface 1 8 ]
+[s S898 hid_descriptor 9 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `ui 1 bcdHID 2 2 `uc 1 bCountryCode 1 4 `uc 1 bNumDescriptors 1 5 `uc 1 bDescriptorType2 1 6 `ui 1 wDescriptorLength 2 7 ]
+[s S906 endpoint_descriptor 7 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `uc 1 bEndpointAddress 1 2 `uc 1 bmAttributes 1 3 `ui 1 wMaxPacketSize 2 4 `uc 1 bInterval 1 6 ]
+[s S913 configuration_1_packet 41 `S263 1 config 9 0 `S888 1 interface 9 9 `S898 1 hid 9 18 `S906 1 ep 7 27 `S906 1 ep1_out 7 34 ]
+[v _configuration_1 configuration_1 `DCCS913  1 s 41 configuration_1 ]
+[s S928 . 4 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `ui 1 lang 2 2 ]
+"191
+[v _str00 str00 `DCCS928  1 s 4 str00 ]
+[s S932 . 24 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `[11]ui 1 chars 22 2 ]
+"197
+[v _vendor_string vendor_string `DCCS932  1 s 24 vendor_string ]
+"203
+[v _product_string product_string `DCCS932  1 s 24 product_string ]
+[s S263 configuration_descriptor 9 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `ui 1 wTotalLength 2 2 `uc 1 bNumInterfaces 1 4 `uc 1 bConfigurationValue 1 5 `uc 1 iConfiguration 1 6 `uc 1 bmAttributes 1 7 `uc 1 bMaxPower 1 8 ]
+"259
+[v _usb_application_config_descs usb_application_config_descs `[1]*.25DCCS263  1 e 2 0 ]
+[s S1195 . 1 `uc 1 IOCIF 1 0 :1:0 
+`uc 1 INTF 1 0 :1:1 
+`uc 1 TMR0IF 1 0 :1:2 
+`uc 1 IOCIE 1 0 :1:3 
+`uc 1 INTE 1 0 :1:4 
+`uc 1 TMR0IE 1 0 :1:5 
+`uc 1 PEIE 1 0 :1:6 
+`uc 1 GIE 1 0 :1:7 
+]
+"360 C:\Program Files (x86)\Microchip\xc8\v1.36\include\pic16f1454.h
+[s S1204 . 1 `uc 1 . 1 0 :2:0 
+`uc 1 T0IF 1 0 :1:2 
+`uc 1 . 1 0 :2:3 
+`uc 1 T0IE 1 0 :1:5 
+]
+[u S1209 . 1 `S1195 1 . 1 0 `S1204 1 . 1 0 ]
+[v _INTCONbits INTCONbits `VES1209  1 e 1 @11 ]
+[s S393 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 ACTIF 1 0 :1:1 
+`uc 1 USBIF 1 0 :1:2 
+`uc 1 BCL1IF 1 0 :1:3 
+`uc 1 . 1 0 :3:4 
+`uc 1 OSFIF 1 0 :1:7 
+]
+"573
+[u S400 . 1 `S393 1 . 1 0 ]
+[v _PIR2bits PIR2bits `VES400  1 e 1 @18 ]
+[s S167 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 ACTIE 1 0 :1:1 
+`uc 1 USBIE 1 0 :1:2 
+`uc 1 BCL1IE 1 0 :1:3 
+`uc 1 . 1 0 :3:4 
+`uc 1 OSFIE 1 0 :1:7 
+]
+"1049
+[u S174 . 1 `S167 1 . 1 0 ]
+[v _PIE2bits PIE2bits `VES174  1 e 1 @146 ]
+[s S1146 . 1 `uc 1 SCS 1 0 :2:0 
+`uc 1 IRCF 1 0 :4:2 
+`uc 1 SPLLMULT 1 0 :1:6 
+`uc 1 SPLLEN 1 0 :1:7 
+]
+"1353
+[s S1151 . 1 `uc 1 SCS0 1 0 :1:0 
+`uc 1 SCS1 1 0 :1:1 
+`uc 1 IRCF0 1 0 :1:2 
+`uc 1 IRCF1 1 0 :1:3 
+`uc 1 IRCF2 1 0 :1:4 
+`uc 1 IRCF3 1 0 :1:5 
+]
+[u S1158 . 1 `S1146 1 . 1 0 `S1151 1 . 1 0 ]
+[v _OSCCONbits OSCCONbits `VES1158  1 e 1 @153 ]
+[s S1174 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 ACTORS 1 0 :1:1 
+`uc 1 . 1 0 :1:2 
+`uc 1 ACTLOCK 1 0 :1:3 
+`uc 1 ACTSRC 1 0 :1:4 
+`uc 1 . 1 0 :1:5 
+`uc 1 ACTUD 1 0 :1:6 
+`uc 1 ACTEN 1 0 :1:7 
+]
+"3162
+[u S1183 . 1 `S1174 1 . 1 0 ]
+[v _ACTCONbits ACTCONbits `VES1183  1 e 1 @923 ]
+[s S66 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 SUSPND 1 0 :1:1 
+`uc 1 RESUME 1 0 :1:2 
+`uc 1 USBEN 1 0 :1:3 
+`uc 1 PKTDIS 1 0 :1:4 
+`uc 1 SE0 1 0 :1:5 
+`uc 1 PPBRST 1 0 :1:6 
+]
+"3565
+[u S74 . 1 `S66 1 . 1 0 ]
+[v _UCONbits UCONbits `VES74  1 e 1 @3726 ]
+[s S335 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 PPBI 1 0 :1:1 
+`uc 1 DIR 1 0 :1:2 
+`uc 1 ENDP 1 0 :4:3 
+]
+"3619
+[s S340 . 1 `uc 1 . 1 0 :3:0 
+`uc 1 ENDP0 1 0 :1:3 
+`uc 1 ENDP1 1 0 :1:4 
+`uc 1 ENDP2 1 0 :1:5 
+`uc 1 ENDP3 1 0 :1:6 
+]
+[u S346 . 1 `S335 1 . 1 0 `S340 1 . 1 0 ]
+[v _USTATbits USTATbits `VES346  1 e 1 @3727 ]
+"3658
+[v _UIR UIR `VEuc  1 e 1 @3728 ]
+[s S118 . 1 `uc 1 URSTIF 1 0 :1:0 
+`uc 1 UERRIF 1 0 :1:1 
+`uc 1 ACTVIF 1 0 :1:2 
+`uc 1 TRNIF 1 0 :1:3 
+`uc 1 IDLEIF 1 0 :1:4 
+`uc 1 STALLIF 1 0 :1:5 
+`uc 1 SOFIF 1 0 :1:6 
+]
+"3674
+[u S126 . 1 `S118 1 . 1 0 ]
+[v _UIRbits UIRbits `VES126  1 e 1 @3728 ]
+[s S92 . 1 `uc 1 PPB 1 0 :2:0 
+`uc 1 FSEN 1 0 :1:2 
+`uc 1 . 1 0 :1:3 
+`uc 1 UPUEN 1 0 :1:4 
+`uc 1 . 1 0 :2:5 
+`uc 1 UTEYE 1 0 :1:7 
+]
+"3732
+[s S99 . 1 `uc 1 PPB0 1 0 :1:0 
+`uc 1 PPB1 1 0 :1:1 
+]
+[u S102 . 1 `S92 1 . 1 0 `S99 1 . 1 0 ]
+[v _UCFGbits UCFGbits `VES102  1 e 1 @3729 ]
+"3766
+[v _UIE UIE `VEuc  1 e 1 @3730 ]
+[s S138 . 1 `uc 1 URSTIE 1 0 :1:0 
+`uc 1 UERRIE 1 0 :1:1 
+`uc 1 ACTVIE 1 0 :1:2 
+`uc 1 TRNIE 1 0 :1:3 
+`uc 1 IDLEIE 1 0 :1:4 
+`uc 1 STALLIE 1 0 :1:5 
+`uc 1 SOFIE 1 0 :1:6 
+]
+"3782
+[u S146 . 1 `S138 1 . 1 0 ]
+[v _UIEbits UIEbits `VES146  1 e 1 @3730 ]
+"3969
+[v _UADDR UADDR `VEuc  1 e 1 @3734 ]
+"4024
+[v _UEIE UEIE `VEuc  1 e 1 @3735 ]
+"4074
+[v _UEP0 UEP0 `VEuc  1 e 1 @3736 ]
+"39 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _main main `(i  1 e 2 0 ]
+{
+"94
+[v main@len_1089 len `uc  1 a 1 7 ]
+"88
+[v main@len_1088 len `uc  1 a 1 6 ]
+"82
+[v main@len_1087 len `uc  1 a 1 5 ]
+"76
+[v main@len len `uc  1 a 1 4 ]
+"108
+[v main@attrid_1091 attrid `ui  1 a 2 0 ]
+"72
+[v main@attrid attrid `ui  1 a 2 9 ]
+"68
+[v main@opcode opcode `uc  1 a 1 8 ]
+"65
+[v main@pcktLen pcktLen `uc  1 a 1 3 ]
+"64
+[v main@pcktVer pcktVer `uc  1 a 1 2 ]
+"52
+[v main@TxDataBuffer TxDataBuffer `*.2uc  1 a 2 13 ]
+"51
+[v main@RxDataBuffer RxDataBuffer `*.2DCCuc  1 a 2 11 ]
+"130
+} 0
+"1525 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _usb_send_in_buffer usb_send_in_buffer `(v  1 e 1 0 ]
+{
+[v usb_send_in_buffer@endpoint endpoint `uc  1 a 1 wreg ]
+[s S19 . 1 `uc 1 BC8 1 0 :1:0 
+`uc 1 BC9 1 0 :1:1 
+`uc 1 PID 1 0 :4:2 
+`uc 1 reserved 1 0 :1:6 
+`uc 1 UOWN 1 0 :1:7 
+]
+"1533
+[s S25 . 1 `uc 1 . 1 0 :1:0 
+`uc 1 . 1 0 :1:1 
+`uc 1 BSTALL 1 0 :1:2 
+`uc 1 DTSEN 1 0 :1:3 
+`uc 1 INCDIS 1 0 :1:4 
+`uc 1 KEN 1 0 :1:5 
+`uc 1 DTS 1 0 :1:6 
+`uc 1 . 1 0 :1:7 
+]
+[u S34 . 1 `S19 1 . 1 0 `S25 1 . 1 0 `uc 1 BDnSTAT 1 0 ]
+[s S38 buffer_descriptor 4 `S34 1 STAT 1 0 `uc 1 BDnCNT 1 1 `ui 1 BDnADR 2 2 ]
+[v usb_send_in_buffer@bd bd `*.4S38  1 a 1 18 ]
+"1532
+[v usb_send_in_buffer@pid pid `uc  1 a 1 16 ]
+"1525
+[v usb_send_in_buffer@endpoint endpoint `uc  1 a 1 wreg ]
+[v usb_send_in_buffer@len len `ui  1 p 2 12 ]
+"1531
+[v usb_send_in_buffer@endpoint endpoint `uc  1 a 1 17 ]
+"1565
+} 0
+"1588
+[v _usb_in_endpoint_halted usb_in_endpoint_halted `(uc  1 e 1 0 ]
+{
+[v usb_in_endpoint_halted@endpoint endpoint `uc  1 a 1 wreg ]
+[v usb_in_endpoint_halted@endpoint endpoint `uc  1 a 1 wreg ]
+"1590
+[v usb_in_endpoint_halted@endpoint endpoint `uc  1 a 1 11 ]
+"1591
+} 0
+"1610
+[v _usb_out_endpoint_has_data usb_out_endpoint_has_data `(uc  1 e 1 0 ]
+{
+[v usb_out_endpoint_has_data@endpoint endpoint `uc  1 a 1 wreg ]
+[v usb_out_endpoint_has_data@endpoint endpoint `uc  1 a 1 wreg ]
+"1616
+[v usb_out_endpoint_has_data@endpoint endpoint `uc  1 a 1 7 ]
+"1618
+} 0
+"561
+[v _usb_init usb_init `(v  1 e 1 0 ]
+{
+[s S158 . 1 `uc 1 EPSTALL 1 0 :1:0 
+`uc 1 EPINEN 1 0 :1:1 
+`uc 1 EPOUTEN 1 0 :1:2 
+`uc 1 EPCONDIS 1 0 :1:3 
+`uc 1 EPHSHK 1 0 :1:4 
+]
+"660
+[u S164 . 1 `S158 1 . 1 0 ]
+[v usb_init@ep ep `*.39VES164  1 a 2 1 ]
+"563
+[v usb_init@i i `uc  1 a 1 0 ]
+"690
+} 0
+"474
+[v _reset_ep0_data_stage reset_ep0_data_stage `(v  1 s 1 reset_ep0_data_stage ]
+{
+"486
+} 0
+"495
+[v _init_endpoints init_endpoints `(v  1 s 1 init_endpoints ]
+{
+"497
+[v init_endpoints@i i `uc  1 a 1 31 ]
+"556
+} 0
+"456
+[v _pic16_linear_addr pic16_linear_addr `(ui  1 s 2 pic16_linear_addr ]
+{
+"458
+[v pic16_linear_addr@addr addr `ui  1 a 2 26 ]
+[v pic16_linear_addr@low low `uc  1 a 1 25 ]
+[v pic16_linear_addr@high high `uc  1 a 1 24 ]
+"456
+[v pic16_linear_addr@ptr ptr `*.2v  1 p 2 12 ]
+"471
+} 0
+"15 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\Umul16.c
+[v ___wmul __wmul `(ui  1 e 2 0 ]
+{
+"17
+[v ___wmul@product product `ui  1 a 2 10 ]
+"15
+[v ___wmul@multiplier multiplier `ui  1 p 2 6 ]
+[v ___wmul@multiplicand multiplicand `ui  1 p 2 8 ]
+"53
+} 0
+"8 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\memset.c
+[v _memset memset `(*.39v  1 e 1 0 ]
+{
+"15
+[v memset@p p `*.39uc  1 a 2 12 ]
+"8
+[v memset@p1 p1 `*.39v  1 p 2 6 ]
+[v memset@c c `i  1 p 2 8 ]
+[v memset@n n `ui  1 p 2 10 ]
+"22
+} 0
+"1567 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _usb_in_endpoint_busy usb_in_endpoint_busy `(uc  1 e 1 0 ]
+{
+[v usb_in_endpoint_busy@endpoint endpoint `uc  1 a 1 wreg ]
+[v usb_in_endpoint_busy@endpoint endpoint `uc  1 a 1 wreg ]
+"1573
+[v usb_in_endpoint_busy@endpoint endpoint `uc  1 a 1 7 ]
+"1575
+} 0
+"1593
+[v _usb_get_out_buffer usb_get_out_buffer `(uc  1 e 1 0 ]
+{
+[v usb_get_out_buffer@endpoint endpoint `uc  1 a 1 wreg ]
+[v usb_get_out_buffer@endpoint endpoint `uc  1 a 1 wreg ]
+[v usb_get_out_buffer@buf buf `*.6*.2DCCuc  1 p 1 10 ]
+"1605
+[v usb_get_out_buffer@endpoint endpoint `uc  1 a 1 12 ]
+"1608
+} 0
+"1513
+[v _usb_get_in_buffer usb_get_in_buffer `(*.2uc  1 e 1 0 ]
+{
+[v usb_get_in_buffer@endpoint endpoint `uc  1 a 1 wreg ]
+[v usb_get_in_buffer@endpoint endpoint `uc  1 a 1 wreg ]
+"1521
+[v usb_get_in_buffer@endpoint endpoint `uc  1 a 1 13 ]
+"1523
+} 0
+"1508
+[v _usb_get_configuration usb_get_configuration `(uc  1 e 1 0 ]
+{
+"1511
+} 0
+"1620
+[v _usb_arm_out_endpoint usb_arm_out_endpoint `(v  1 e 1 0 ]
+{
+[v usb_arm_out_endpoint@endpoint endpoint `uc  1 a 1 wreg ]
+"1640
+[v usb_arm_out_endpoint@pid pid `uc  1 a 1 13 ]
+"1620
+[v usb_arm_out_endpoint@endpoint endpoint `uc  1 a 1 wreg ]
+"1640
+[v usb_arm_out_endpoint@endpoint endpoint `uc  1 a 1 14 ]
+"1653
+} 0
+"4 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\Umul8.c
+[v ___bmul __bmul `(uc  1 e 1 0 ]
+{
+[v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
+"6
+[v ___bmul@product product `uc  1 a 1 8 ]
+"4
+[v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
+[v ___bmul@multiplicand multiplicand `uc  1 p 1 6 ]
+"6
+[v ___bmul@multiplier multiplier `uc  1 a 1 9 ]
+"51
+} 0
+"4 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\strlen.c
+[v _strlen strlen `(ui  1 e 2 0 ]
+{
+"6
+[v strlen@cp cp `*.25DCCuc  1 a 2 10 ]
+"4
+[v strlen@s s `*.25DCCuc  1 p 2 6 ]
+"13
+} 0
+"202 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps/common/hardware.c
+[v _hardware_init hardware_init `(v  1 e 1 0 ]
+{
+"255
+} 0
+"260 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _isr isr `II(v  1 e 1 0 ]
+{
+"263
+} 0
+"1391 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _usb_service usb_service `(v  1 e 1 0 ]
+{
+[s S158 . 1 `uc 1 EPSTALL 1 0 :1:0 
+`uc 1 EPINEN 1 0 :1:1 
+`uc 1 EPOUTEN 1 0 :1:2 
+`uc 1 EPCONDIS 1 0 :1:3 
+`uc 1 EPHSHK 1 0 :1:4 
+]
+"1411
+[u S164 . 1 `S158 1 . 1 0 ]
+[v usb_service@ep ep `*.39VES164  1 a 2 0 ]
+"1434
+[v usb_service@pid pid `uc  1 a 1 2 ]
+"1409
+[v usb_service@i i `i  1 a 2 3 ]
+"1506
+} 0
+"561
+[v i1_usb_init usb_init `(v  1 e 1 0 ]
+{
+[s S158 . 1 `uc 1 EPSTALL 1 0 :1:0 
+`uc 1 EPINEN 1 0 :1:1 
+`uc 1 EPOUTEN 1 0 :1:2 
+`uc 1 EPCONDIS 1 0 :1:3 
+`uc 1 EPHSHK 1 0 :1:4 
+]
+[u S164 . 1 `S158 1 . 1 0 ]
+[v i1usb_init@ep usb_init `*.39VES164  1 a 2 16 ]
+[v i1usb_init@i usb_init `uc  1 a 1 15 ]
+"690
+} 0
+"692
+[v _reset_bd0_out reset_bd0_out `(v  1 s 1 reset_bd0_out ]
+{
+"702
+} 0
+"1149
+[v _handle_ep0_setup handle_ep0_setup `T(v  1 s 1 handle_ep0_setup ]
+{
+[s S196 . 1 `uc 1 destination 1 0 :5:0 
+`uc 1 type 1 0 :2:5 
+`uc 1 direction 1 0 :1:7 
+]
+"1151
+[u S200 . 1 `S196 1 . 1 0 `uc 1 bmRequestType 1 0 ]
+[s S203 setup_packet 8 `S200 1 REQUEST 1 0 `uc 1 bRequest 1 1 `ui 1 wValue 2 2 `ui 1 wIndex 2 4 `ui 1 wLength 2 6 ]
+[v handle_ep0_setup@setup setup `*.39S203  1 a 2 58 ]
+"1162
+[v handle_ep0_setup@res res `c  1 a 1 57 ]
+"1261
+} 0
+"852
+[v _handle_standard_control_request handle_standard_control_request `T(c  1 s 1 handle_standard_control_request ]
+{
+"1076
+[v handle_standard_control_request@ep_num_591 ep_num `uc  1 a 1 41 ]
+"1077
+[v handle_standard_control_request@ep_dir ep_dir `uc  1 a 1 36 ]
+"1004
+[v handle_standard_control_request@ret_586 ret `[2]uc  1 a 2 18 ]
+"1003
+[v handle_standard_control_request@flags flags `uc  1 a 1 34 ]
+"910
+[v handle_standard_control_request@desc_574 desc `*.25DCCv  1 a 2 37 ]
+"911
+[v handle_standard_control_request@len len `i  1 a 2 28 ]
+"1001
+[v handle_standard_control_request@ep_num ep_num `uc  1 a 1 33 ]
+"991
+[v handle_standard_control_request@ret ret `ui  1 a 2 16 ]
+"929
+[v handle_standard_control_request@len_576 len `i  1 a 2 30 ]
+"930
+[v handle_standard_control_request@desc_577 desc `*.1DCCv  1 a 1 25 ]
+[s S263 configuration_descriptor 9 `uc 1 bLength 1 0 `uc 1 bDescriptorType 1 1 `ui 1 wTotalLength 2 2 `uc 1 bNumInterfaces 1 4 `uc 1 bConfigurationValue 1 5 `uc 1 iConfiguration 1 6 `uc 1 bmAttributes 1 7 `uc 1 bMaxPower 1 8 ]
+"878
+[v handle_standard_control_request@desc desc `*.25DCCS263  1 a 2 26 ]
+"1068
+[v handle_standard_control_request@stall stall `uc  1 a 1 24 ]
+"1043
+[v handle_standard_control_request@ret_589 ret `c  1 a 1 35 ]
+"1023
+[v handle_standard_control_request@res_588 res `c  1 a 1 20 ]
+"958
+[v handle_standard_control_request@req req `uc  1 a 1 32 ]
+"869
+[v handle_standard_control_request@descriptor_index descriptor_index `uc  1 a 1 40 ]
+"868
+[v handle_standard_control_request@descriptor descriptor `uc  1 a 1 39 ]
+[s S196 . 1 `uc 1 destination 1 0 :5:0 
+`uc 1 type 1 0 :2:5 
+`uc 1 direction 1 0 :1:7 
+]
+"854
+[u S200 . 1 `S196 1 . 1 0 `uc 1 bmRequestType 1 0 ]
+[s S203 setup_packet 8 `S200 1 REQUEST 1 0 `uc 1 bRequest 1 1 `ui 1 wValue 2 2 `ui 1 wIndex 2 4 `ui 1 wLength 2 6 ]
+[v handle_standard_control_request@setup setup `*.39S203  1 a 2 42 ]
+"855
+[v handle_standard_control_request@res res `c  1 a 1 23 ]
+"1147
+} 0
+"495
+[v i1_init_endpoints init_endpoints `(v  1 s 1 i1_init_endpoints ]
+{
+[v i1init_endpoints@i init_endpoints `uc  1 a 1 12 ]
+"556
+} 0
+"456
+[v i1_pic16_linear_addr pic16_linear_addr `(ui  1 s 2 i1_pic16_linear_addr ]
+{
+[v i1pic16_linear_addr@addr pic16_linear_addr `ui  1 a 2 10 ]
+[v i1pic16_linear_addr@low pic16_linear_addr `uc  1 a 1 9 ]
+[v i1pic16_linear_addr@high pic16_linear_addr `uc  1 a 1 8 ]
+[v i1pic16_linear_addr@ptr ptr `*.2v  1 p 2 6 ]
+"471
+} 0
+"15 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\Umul16.c
+[v i1___wmul __wmul `(ui  1 e 2 0 ]
+{
+[v i1___wmul@product __wmul `ui  1 a 2 4 ]
+[v i1___wmul@multiplier multiplier `ui  1 p 2 0 ]
+[v i1___wmul@multiplicand multiplicand `ui  1 p 2 2 ]
+"53
+} 0
+"8 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\memset.c
+[v i1_memset memset `(*.39v  1 e 1 0 ]
+{
+[v i1memset@p memset `*.39uc  1 a 2 6 ]
+[v i1memset@p1 p1 `*.39v  1 p 2 0 ]
+[v i1memset@c c `i  1 p 2 2 ]
+[v i1memset@n n `ui  1 p 2 4 ]
+"22
+} 0
+"1655 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _usb_halt_ep_out usb_halt_ep_out `(uc  1 e 1 0 ]
+{
+[v usb_halt_ep_out@ep ep `uc  1 a 1 wreg ]
+[v usb_halt_ep_out@ep ep `uc  1 a 1 wreg ]
+"1657
+[v usb_halt_ep_out@ep ep `uc  1 a 1 5 ]
+"1664
+} 0
+"742
+[v _stall_ep_out stall_ep_out `(v  1 s 1 stall_ep_out ]
+{
+[v stall_ep_out@ep ep `uc  1 a 1 wreg ]
+[v stall_ep_out@ep ep `uc  1 a 1 wreg ]
+[v stall_ep_out@ep ep `uc  1 a 1 2 ]
+"751
+} 0
+"1577
+[v _usb_halt_ep_in usb_halt_ep_in `(uc  1 e 1 0 ]
+{
+[v usb_halt_ep_in@ep ep `uc  1 a 1 wreg ]
+[v usb_halt_ep_in@ep ep `uc  1 a 1 wreg ]
+"1579
+[v usb_halt_ep_in@ep ep `uc  1 a 1 9 ]
+"1586
+} 0
+"731
+[v _stall_ep_in stall_ep_in `(v  1 s 1 stall_ep_in ]
+{
+[v stall_ep_in@ep ep `uc  1 a 1 wreg ]
+[v stall_ep_in@ep ep `uc  1 a 1 wreg ]
+[v stall_ep_in@ep ep `uc  1 a 1 7 ]
+"740
+} 0
+"225 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/usb_descriptors.c
+[v _usb_application_get_string usb_application_get_string `(i  1 e 2 0 ]
+{
+[v usb_application_get_string@string_number string_number `uc  1 a 1 wreg ]
+[v usb_application_get_string@string_number string_number `uc  1 a 1 wreg ]
+[v usb_application_get_string@ptr ptr `*.4*.25DCCv  1 p 1 0 ]
+"227
+[v usb_application_get_string@string_number string_number `uc  1 a 1 3 ]
+"246
+} 0
+"181 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _app_unknown_get_descriptor_callback app_unknown_get_descriptor_callback `(i  1 e 2 0 ]
+{
+[s S196 . 1 `uc 1 destination 1 0 :5:0 
+`uc 1 type 1 0 :2:5 
+`uc 1 direction 1 0 :1:7 
+]
+[u S200 . 1 `S196 1 . 1 0 `uc 1 bmRequestType 1 0 ]
+[s S203 setup_packet 8 `S200 1 REQUEST 1 0 `uc 1 bRequest 1 1 `ui 1 wValue 2 2 `ui 1 wIndex 2 4 `ui 1 wLength 2 6 ]
+[v app_unknown_get_descriptor_callback@pkt pkt `*.39DCCS203  1 p 2 0 ]
+[v app_unknown_get_descriptor_callback@descriptor descriptor `*.4*.1DCCv  1 p 1 2 ]
+"184
+} 0
+"148
+[v _app_set_interface_callback app_set_interface_callback `(c  1 e 1 0 ]
+{
+[v app_set_interface_callback@alt_setting alt_setting `uc  1 p 1 0 ]
+"151
+} 0
+"133
+[v _app_set_configuration_callback app_set_configuration_callback `(v  1 e 1 0 ]
+{
+"136
+} 0
+"153
+[v _app_get_interface_callback app_get_interface_callback `(c  1 e 1 0 ]
+{
+"156
+} 0
+"138
+[v _app_get_device_status_callback app_get_device_status_callback `(ui  1 e 2 0 ]
+{
+"141
+} 0
+"143
+[v _app_endpoint_halt_callback app_endpoint_halt_callback `(v  1 e 1 0 ]
+{
+[v app_endpoint_halt_callback@halted halted `uc  1 p 1 0 ]
+"146
+} 0
+"717 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _clear_ep0_stall clear_ep0_stall `(v  1 s 1 clear_ep0_stall ]
+{
+"728
+} 0
+"168 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _app_unknown_setup_request_callback app_unknown_setup_request_callback `(c  1 e 1 0 ]
+{
+[s S196 . 1 `uc 1 destination 1 0 :5:0 
+`uc 1 type 1 0 :2:5 
+`uc 1 direction 1 0 :1:7 
+]
+[u S200 . 1 `S196 1 . 1 0 `uc 1 bmRequestType 1 0 ]
+[s S203 setup_packet 8 `S200 1 REQUEST 1 0 `uc 1 bRequest 1 1 `ui 1 wValue 2 2 `ui 1 wIndex 2 4 `ui 1 wLength 2 6 ]
+[v app_unknown_setup_request_callback@setup setup `*.39DCCS203  1 p 2 55 ]
+"179
+} 0
+"50 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb_hid.c
+[v _process_hid_setup_request process_hid_setup_request `(uc  1 e 1 0 ]
+{
+"169
+[v process_hid_setup_request@res_851 res `c  1 a 1 37 ]
+"157
+[v process_hid_setup_request@res_850 res `c  1 a 1 45 ]
+"147
+[v process_hid_setup_request@res_849 res `uc  1 a 1 36 ]
+"146
+[v process_hid_setup_request@report_id_848 report_id `uc  1 a 1 35 ]
+"145
+[v process_hid_setup_request@duration duration `uc  1 a 1 34 ]
+"135
+[v process_hid_setup_request@res_846 res `uc  1 a 1 33 ]
+"134
+[v process_hid_setup_request@report_id_845 report_id `uc  1 a 1 32 ]
+"125
+[v process_hid_setup_request@res res `c  1 a 1 31 ]
+"124
+[v process_hid_setup_request@report_id_843 report_id `uc  1 a 1 30 ]
+"123
+[v process_hid_setup_request@report_type_842 report_type `uc  1 a 1 29 ]
+"108
+[v process_hid_setup_request@report_id report_id `uc  1 a 1 28 ]
+"107
+[v process_hid_setup_request@report_type report_type `uc  1 a 1 27 ]
+"77
+[v process_hid_setup_request@len len `i  1 a 2 52 ]
+"76
+[v process_hid_setup_request@desc desc `*.25DCCv  1 a 2 50 ]
+"74
+[v process_hid_setup_request@descriptor descriptor `uc  1 a 1 44 ]
+"102
+[v process_hid_setup_request@len_831 len `i  1 a 2 48 ]
+"103
+[v process_hid_setup_request@callback callback `*.37(c  1 a 2 42 ]
+"54
+[v process_hid_setup_request@interface interface `uc  1 a 1 54 ]
+"104
+[v process_hid_setup_request@context context `*.1v  1 a 1 47 ]
+"101
+[v process_hid_setup_request@desc_830 desc `*.5DCCv  1 a 1 46 ]
+[s S196 . 1 `uc 1 destination 1 0 :5:0 
+`uc 1 type 1 0 :2:5 
+`uc 1 direction 1 0 :1:7 
+]
+"50
+[u S200 . 1 `S196 1 . 1 0 `uc 1 bmRequestType 1 0 ]
+[s S203 setup_packet 8 `S200 1 REQUEST 1 0 `uc 1 bRequest 1 1 `ui 1 wValue 2 2 `ui 1 wIndex 2 4 `ui 1 wLength 2 6 ]
+[v process_hid_setup_request@setup setup `*.39DCCS203  1 p 2 20 ]
+"176
+} 0
+"1682 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _usb_send_data_stage usb_send_data_stage `(v  1 e 1 0 ]
+{
+[v usb_send_data_stage@buffer buffer `*.26uc  1 p 2 13 ]
+[v usb_send_data_stage@len len `ui  1 p 2 15 ]
+"1683
+[v usb_send_data_stage@callback callback `*.37(c  1 p 2 17 ]
+[v usb_send_data_stage@context context `*.1v  1 p 1 19 ]
+"1690
+} 0
+"837
+[v _start_control_return start_control_return `(v  1 s 1 start_control_return ]
+{
+"839
+[v start_control_return@bytes_to_send bytes_to_send `uc  1 a 1 12 ]
+"837
+[v start_control_return@ptr ptr `*.26DCCv  1 p 2 0 ]
+[v start_control_return@len len `ui  1 p 2 2 ]
+[v start_control_return@bytes_asked_for bytes_asked_for `ui  1 p 2 4 ]
+"850
+} 0
+"277 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/usb_descriptors.c
+[v _usb_application_get_hid_report_descriptor usb_application_get_hid_report_descriptor `(i  1 e 2 0 ]
+{
+[v usb_application_get_hid_report_descriptor@ptr ptr `*.4*.25DCCv  1 p 1 0 ]
+"281
+} 0
+"267
+[v _usb_application_get_hid_descriptor usb_application_get_hid_descriptor `(i  1 e 2 0 ]
+{
+"271
+[v usb_application_get_hid_descriptor@p p `*.25DCCv  1 a 2 3 ]
+"267
+[v usb_application_get_hid_descriptor@ptr ptr `*.4*.25DCCv  1 p 1 0 ]
+"274
+} 0
+"227 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _app_set_report_callback app_set_report_callback `(c  1 e 1 0 ]
+{
+[v app_set_report_callback@report_type report_type `uc  1 p 1 0 ]
+"228
+[v app_set_report_callback@report_id report_id `uc  1 p 1 1 ]
+"235
+} 0
+"253
+[v _app_set_protocol_callback app_set_protocol_callback `(c  1 e 1 0 ]
+{
+[v app_set_protocol_callback@report_id report_id `uc  1 p 1 0 ]
+"256
+} 0
+"242
+[v _app_set_idle_callback app_set_idle_callback `(c  1 e 1 0 ]
+{
+[v app_set_idle_callback@report_id report_id `uc  1 p 1 0 ]
+"243
+[v app_set_idle_callback@idle_rate idle_rate `uc  1 p 1 1 ]
+"246
+} 0
+"208
+[v _app_get_report_callback app_get_report_callback `(i  1 e 2 0 ]
+{
+[v app_get_report_callback@report_type report_type `uc  1 p 1 0 ]
+"209
+[v app_get_report_callback@report_id report_id `uc  1 p 1 1 ]
+[v app_get_report_callback@report report `*.4*.5DCCv  1 p 1 2 ]
+"210
+[v app_get_report_callback@callback callback `*.4*.37(c  1 p 1 3 ]
+"211
+[v app_get_report_callback@context context `*.4*.1v  1 p 1 4 ]
+"225
+} 0
+"248
+[v _app_get_protocol_callback app_get_protocol_callback `(c  1 e 1 0 ]
+{
+"251
+} 0
+"237
+[v _app_get_idle_callback app_get_idle_callback `(uc  1 e 1 0 ]
+{
+[v app_get_idle_callback@report_id report_id `uc  1 p 1 0 ]
+"240
+} 0
+"1263 D:\Toolbit\firmware\workspace\m-stack/usb/src/usb.c
+[v _handle_ep0_out handle_ep0_out `T(v  1 s 1 handle_ep0_out ]
+{
+"1320
+[v handle_ep0_out@res res `c  1 a 1 6 ]
+"1289
+[v handle_ep0_out@bytes_to_copy bytes_to_copy `uc  1 a 1 8 ]
+"1268
+[v handle_ep0_out@pkt_len pkt_len `uc  1 a 1 7 ]
+"1344
+} 0
+"704
+[v _stall_ep0 stall_ep0 `(v  1 s 1 stall_ep0 ]
+{
+"714
+} 0
+"753
+[v _send_zero_length_packet_ep0 send_zero_length_packet_ep0 `(v  1 s 1 send_zero_length_packet_ep0 ]
+{
+"764
+} 0
+"1346
+[v _handle_ep0_in handle_ep0_in `T(v  1 s 1 handle_ep0_in ]
+{
+"1355
+[v handle_ep0_in@bytes_to_send bytes_to_send `uc  1 a 1 2 ]
+"1387
+} 0
+"474
+[v i1_reset_ep0_data_stage reset_ep0_data_stage `(v  1 s 1 i1_reset_ep0_data_stage ]
+{
+"486
+} 0
+"766
+[v _usb_send_in_buffer_0 usb_send_in_buffer_0 `(v  1 s 1 usb_send_in_buffer_0 ]
+{
+"786
+[v usb_send_in_buffer_0@pid pid `uc  1 a 1 9 ]
+"766
+[v usb_send_in_buffer_0@len len `ui  1 p 2 6 ]
+"800
+} 0
+"1588
+[v i1_usb_in_endpoint_halted usb_in_endpoint_halted `(uc  1 e 1 0 ]
+{
+[v i1usb_in_endpoint_halted@endpoint endpoint `uc  1 a 1 wreg ]
+[v i1usb_in_endpoint_halted@endpoint endpoint `uc  1 a 1 wreg ]
+"1590
+[v i1usb_in_endpoint_halted@endpoint endpoint `uc  1 a 1 5 ]
+"1591
+} 0
+"4 C:\Program Files (x86)\Microchip\xc8\v1.36\sources\common\Umul8.c
+[v i1___bmul __bmul `(uc  1 e 1 0 ]
+{
+[v i1___bmul@multiplier multiplier `uc  1 a 1 wreg ]
+[v i1___bmul@product __bmul `uc  1 a 1 3 ]
+[v i1___bmul@multiplier multiplier `uc  1 a 1 wreg ]
+[v i1___bmul@multiplicand multiplicand `uc  1 p 1 0 ]
+"6
+[v i1___bmul@multiplier multiplier `uc  1 a 1 2 ]
+"51
+} 0
+"200 D:\Toolbit\firmware\workspace\m-stack\toolbit_apps\chopper_hub/main.c
+[v _get_report_callback get_report_callback `(c  1 s 1 get_report_callback ]
+{
+[v get_report_callback@transfer_ok transfer_ok `uc  1 p 1 0 ]
+[v get_report_callback@context context `*.1v  1 p 1 1 ]
+"206
+} 0
+"191
+[v _app_usb_reset_callback app_usb_reset_callback `(v  1 e 1 0 ]
+{
+"194
+} 0
+"186
+[v _app_start_of_frame_callback app_start_of_frame_callback `(v  1 e 1 0 ]
+{
+"189
+} 0
+"158
+[v _app_out_transaction_callback app_out_transaction_callback `(v  1 e 1 0 ]
+{
+"161
+} 0
+"163
+[v _app_in_transaction_complete_callback app_in_transaction_complete_callback `(v  1 e 1 0 ]
+{
+"166
+} 0
