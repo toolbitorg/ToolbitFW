@@ -1,8 +1,8 @@
-MPLAB.X/nbproject/Makefile-genesis.properties
-MPLAB.X/nbproject/Makefile-*.mk
-MPLAB.X/nbproject/Package-*.bash
-MPLAB.X/nbproject/private/
-MPLAB.X/build/
-MPLAB.X/dist
-MPLAB.X/funclist
-MPLAB.X/disassembly/
+chopper_hub.X/nbproject/Makefile-genesis.properties
+chopper_hub.X/nbproject/Makefile-*.mk
+chopper_hub.X/nbproject/Package-*.bash
+chopper_hub.X/nbproject/private/
+chopper_hub.X/build/
+chopper_hub.X/dist
+chopper_hub.X/funclist
+chopper_hub.X/disassembly/

@@ -288,6 +288,9 @@ struct buffer_descriptor {
 #ifdef _18F46J50
 #define BD_ADDR 0x400
 //#undef BUFFER_ADDR
+#elif _18F14K50
+#define BD_ADDR 0x400
+//#undef BUFFER_ADDR
 #else
 #error "CPU not supported yet"
 #endif
