@@ -203,7 +203,7 @@ static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t ch
 static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } product_string = {
 	sizeof(product_string),
 	DESC_STRING,
-	{'B','a','s','i','c',' ','D','e','m','o',' '}
+	{'L','u','k','e'}
 };
 
 static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } interface_string = {

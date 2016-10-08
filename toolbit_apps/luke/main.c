@@ -1,5 +1,5 @@
 /*
- * Chopper HUB
+ * Luke
  * 
  * This program is based on M-Stack and USB HID Mouse released by
  * Signal 11 Software
@@ -33,25 +33,38 @@
 #include "usb_ch9.h"
 #include "usb_hid.h"
 #include "hardware.h"
+#include "i2c-lib.h"
 #include "attribute.h"
 
 #ifdef MULTI_CLASS_DEVICE
 static uint8_t hid_interfaces[] = {0};
 #endif
 
+#define I2C_INA_ADDR  0x40
+#define I2C_WRITE_CMD 0
+#define I2C_READ_CMD  1
+
+void luke_init() {
+    LATC = 0x0;
+    ANSELC = 0xC;
+    PORTC = 0x00;
+    TRISC = 0x03;  // RC0, RC1: input, other pins: output
+    i2c_enable();
+}
+
 int main(void) {
     hardware_init();
 
+    luke_init();
+    
 #ifdef MULTI_CLASS_DEVICE
     hid_set_interface_list(hid_interfaces, sizeof (hid_interfaces));
 #endif
     usb_init();
 
-    PORTC = 0x00;
-    TRISC = 0xFC;  // RC0, RC1 are output pins for now
-
     uint8_t value = 0; // This value will be set by host PC
-
+    uint8_t regAddr = 0;
+        
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
             //                uint8_t len;
@@ -104,31 +117,44 @@ int main(void) {
                             TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
                             memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
 
-                        } else if (id == 0x1000) {
 
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 1 + 3; // packet length
-                            TxDataBuffer[3] = value;
+                        } else if (id == 0x2001) {
 
+                            TxDataBuffer[0] = PROTOCOL_VERSION | 2 + 3; // packet length
+                           
+                            i2c_start();
+                            i2c_send_byte(I2C_INA_ADDR << 1 | I2C_WRITE_CMD); // Address is 0x40
+                            i2c_send_byte(regAddr);
+                            i2c_repeat_start();                        
+                            i2c_send_byte(I2C_INA_ADDR << 1 | I2C_READ_CMD); // Address is 0x40
+                            TxDataBuffer[4] = i2c_read_byte(1); 
+                            TxDataBuffer[3] = i2c_read_byte(1);
+                            i2c_stop();
+                            
                         } else {
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
                         }
 
+                        // end of if (opcode == OP_ATTR_VALUE_GET)
                     } else if (opcode == OP_ATTR_VALUE_SET) {
 
                         ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
                         TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                         TxDataBuffer[2] = RC_OK; // Return OK code
 
-                        if (id == 0x1000) {
+                        if (id == 0x2000) {
 
-                            value = RxDataBuffer[4];
-                            if(value%2==0) {
-                                PORTC = 0x03;
-                            } else {
-                                PORTC = 0x00;
-                            }
-                          
+                            regAddr = RxDataBuffer[4];
+
+                        } else if (id == 0x2001) {
+                           
+                            i2c_start();
+                            i2c_send_byte(I2C_INA_ADDR << 1 | I2C_WRITE_CMD);
+                            i2c_send_byte(regAddr);
+                            i2c_send_byte(RxDataBuffer[5]);
+                            i2c_send_byte(RxDataBuffer[4]);
+                            i2c_stop();
 
                         } else {
 
@@ -142,7 +168,8 @@ int main(void) {
                     memcpy(usb_get_in_buffer(1), TxDataBuffer, EP_1_IN_LEN);
                     usb_send_in_buffer(1, EP_1_IN_LEN);
 
-                }
+                   
+                } // end of if (pcktVer == PROTOCOL_VERSION && pcktLen > 1)
             }
             usb_arm_out_endpoint(1);
         }
