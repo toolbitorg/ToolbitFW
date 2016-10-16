@@ -39,6 +39,8 @@
 static uint8_t hid_interfaces[] = {0};
 #endif
 
+#define ATT_USB_PORT_CTRL 0x1000
+
 int main(void) {
     hardware_init();
 
@@ -49,9 +51,12 @@ int main(void) {
 
     PORTC = 0x00;
     TRISC = 0xFC;  // RC0, RC1 are output pins for now
-
-    uint8_t value = 0; // This value will be set by host PC
-
+    uint8_t portCtrl[4];
+    portCtrl[0] = 0;
+    portCtrl[1] = 0;
+    portCtrl[2] = 0;
+    portCtrl[3] = 0;
+    
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
             //                uint8_t len;
@@ -104,11 +109,14 @@ int main(void) {
                             TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
                             memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
 
-                        } else if (id == 0x1000) {
+                        } else if (id == ATT_USB_PORT_CTRL) {
 
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 1 + 3; // packet length
-                            TxDataBuffer[3] = value;
-
+                            TxDataBuffer[0] = PROTOCOL_VERSION | 4 + 3; // packet length
+                            TxDataBuffer[3] = portCtrl[0];
+                            TxDataBuffer[4] = portCtrl[1];
+                            TxDataBuffer[5] = portCtrl[2];
+                            TxDataBuffer[6] = portCtrl[3];
+                            
                         } else {
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
@@ -120,16 +128,14 @@ int main(void) {
                         TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                         TxDataBuffer[2] = RC_OK; // Return OK code
 
-                        if (id == 0x1000) {
-
-                            value = RxDataBuffer[4];
-                            if(value%2==0) {
-                                PORTC = 0x03;
-                            } else {
-                                PORTC = 0x00;
-                            }
+                        if (id == ATT_USB_PORT_CTRL) {
                           
-
+                            portCtrl[0] = RxDataBuffer[4];
+                            PORTC = portCtrl[0];
+                            //portCtrl[1] = RxDataBuffer[5];
+                            //portCtrl[2] = RxDataBuffer[6];
+                            //portCtrl[3] = RxDataBuffer[7];
+                            
                         } else {
 
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
