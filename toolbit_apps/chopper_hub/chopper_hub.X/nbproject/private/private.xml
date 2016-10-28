@@ -1,18 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/C:/MinGW/msys/1.0/home/jun2ohama/Toolbit/firmware/workspace/ToolbitFW/toolbit_apps/chopper_hub/main.c</file>
-        <file>file:/C:/MinGW/msys/1.0/home/jun2ohama/Toolbit/firmware/workspace/ToolbitFW/toolbit_apps/common/hardware.h</file>
-    </open-files>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/chopper_hub/usb_descriptors.c</file>
-            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/chopper_hub/commands.h</file>
-            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/common/hardware.h</file>
-            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/chopper_hub/chopper_hub.X/nbproject/Makefile-PIC16F1454.mk</file>
-            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/chopper_hub/main.c</file>
-            <file>file:/D:/Toolbit/firmware/workspace/m-stack/toolbit_apps/chopper_hub/usb_config.h</file>
+            <file>file:/C:/MinGW/msys/1.0/home/jun2ohama/Toolbit/firmware/workspace/ToolbitFW/toolbit_apps/chopper_hub/main.c</file>
+            <file>file:/C:/MinGW/msys/1.0/home/jun2ohama/Toolbit/firmware/workspace/ToolbitFW/toolbit_apps/chopper_hub/attribute.h</file>
         </group>
     </open-files>
 </project-private>

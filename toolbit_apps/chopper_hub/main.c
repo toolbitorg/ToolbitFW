@@ -39,23 +39,44 @@
 static uint8_t hid_interfaces[] = {0};
 #endif
 
-#define ATT_USB_PORT_CTRL 0x1000
+#define ATT_USB_PORT_CTRL 0x1000  // 4 byte
 
-int main(void) {
-    hardware_init();
 
-#ifdef MULTI_CLASS_DEVICE
-    hid_set_interface_list(hid_interfaces, sizeof (hid_interfaces));
-#endif
-    usb_init();
-
+void chopper_init()
+{
+    // Output pins to control load switches
     PORTC = 0x00;
     TRISC = 0xFC;  // RC0, RC1 are output pins for now
+    
+    // interrupt setting for over current protection
+    LATA = 0x00;
+    ANSELA = 0x00;
+    PORTA = 0x00;
+    TRISA = 0xFF;
+    IOCAP = 0x00;
+    IOCAN = 0x30;  // RA4, RA5 are set as negative edge interrupt pins
+    IOCAF = 0x00;  // Clear flags
+    // Enable interrupt-on-change
+    INTCONbits.IOCIE = 1; 
+    INTCONbits.PEIE = 1;
+}
+
+
+int main(void) {
     uint8_t portCtrl[4];
     portCtrl[0] = 0;
     portCtrl[1] = 0;
     portCtrl[2] = 0;
     portCtrl[3] = 0;
+
+    hardware_init();
+    
+    chopper_init();
+
+#ifdef MULTI_CLASS_DEVICE
+    hid_set_interface_list(hid_interfaces, sizeof (hid_interfaces));
+#endif
+    usb_init();
     
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
@@ -273,7 +294,19 @@ int8_t app_set_protocol_callback(uint8_t interface, uint8_t report_id) {
 #ifdef _PIC14E
 
 void interrupt isr() {
-    usb_service();
+    if(INTCONbits.IOCIF) {
+        // Over current happens
+        if(IOCAFbits.IOCAF4) {
+            PORTCbits.RC1 = 0;
+        }
+        if(IOCAFbits.IOCAF5) {
+            PORTCbits.RC0 = 0;        
+        }
+        IOCAF = 0x00;  // Clear flags
+    }
+    else {
+        usb_service();
+    }
 }
 #elif _PIC18
 
