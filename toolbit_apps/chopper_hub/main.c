@@ -64,10 +64,10 @@ void chopper_init()
 
 int main(void) {
     uint8_t portCtrl[4];
-    portCtrl[0] = 0;
-    portCtrl[1] = 0;
-    portCtrl[2] = 0;
-    portCtrl[3] = 0;
+    portCtrl[0] = 0x03;
+    portCtrl[1] = 0x00;
+    portCtrl[2] = 0x00;
+    portCtrl[3] = 0x00;
 
     hardware_init();
     
@@ -150,9 +150,14 @@ int main(void) {
                         TxDataBuffer[2] = RC_OK; // Return OK code
 
                         if (id == ATT_USB_PORT_CTRL) {
-                          
+
+                            uint8_t out = 0x00;
                             portCtrl[0] = RxDataBuffer[4];
-                            PORTC = portCtrl[0];
+                            if (!(portCtrl[0] & 0x01)) // Check port 2
+                                out = out | 0x2; 
+                            if (!(portCtrl[0] & 0x02)) // Check port 1
+                                out = out | 0x1; 
+                            PORTC = out;
                             //portCtrl[1] = RxDataBuffer[5];
                             //portCtrl[2] = RxDataBuffer[6];
                             //portCtrl[3] = RxDataBuffer[7];
