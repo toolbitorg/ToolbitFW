@@ -35,14 +35,12 @@
 #include "hardware.h"
 #include "i2c-lib.h"
 #include "attribute.h"
+#include "luke_func.h"
 
 #ifdef MULTI_CLASS_DEVICE
 static uint8_t hid_interfaces[] = {0};
 #endif
 
-#define I2C_INA_ADDR  0x40
-#define I2C_WRITE_CMD 0
-#define I2C_READ_CMD  1
 
 void luke_init() {
     LATC = 0x0;
@@ -88,77 +86,70 @@ int main(void) {
                     uint8_t opcode = RxDataBuffer[1];
                     TxDataBuffer[1] = opcode; // echo back operation code
 
-                    if (opcode == OP_ATTR_VALUE_GET) {
+                    if (opcode == OP_ATT_VALUE_GET) {
 
                         ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
                         TxDataBuffer[2] = RC_OK; // Return OK code
-
+                        TxDataBuffer[0] = PROTOCOL_VERSION;
+                        
                         if (id == ATT_PRODUCT_NAME) {
 
                             uint8_t len = strlen(PRODUCT_NAME) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], PRODUCT_NAME, len);
 
                         } else if (id == ATT_PRODUCT_REVISION) {
 
                             uint8_t len = strlen(PRODUCT_REVISION) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], PRODUCT_REVISION, len);
 
                         } else if (id == ATT_PRODUCT_SERIAL) {
 
                             uint8_t len = strlen(PRODUCT_SERIAL) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], PRODUCT_SERIAL, len);
 
                         } else if (id == ATT_FIRM_VERSION) {
 
                             uint8_t len = strlen(FIRM_VERSION) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
 
+                        } else if (id == ATT_VOLTAGE) {
 
-                        } else if (id == 0x2001) {
+                            TxDataBuffer[0] |= 4 + 3; // packet length
+                            TxDataBuffer[3] = 0; // return setting... 
+                            
+                        } else if (id == ATT_REG_VAL) {
 
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 2 + 3; // packet length
-                           
-                            i2c_start();
-                            i2c_send_byte(I2C_INA_ADDR << 1 | I2C_WRITE_CMD); // Address is 0x40
-                            i2c_send_byte(regAddr);
-                            i2c_repeat_start();                        
-                            i2c_send_byte(I2C_INA_ADDR << 1 | I2C_READ_CMD); // Address is 0x40
-                            TxDataBuffer[4] = i2c_read_byte(1); 
-                            TxDataBuffer[3] = i2c_read_byte(1);
-                            i2c_stop();
+                            TxDataBuffer[0]  |= 2 + 3; // packet length
+                            uint16_t dat = i2c_reg_read(regAddr);
+                            TxDataBuffer[4] = dat >> 8; 
+                            TxDataBuffer[3] = dat;
                             
                         } else {
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
+                            TxDataBuffer[0] |= 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
                         }
 
-                        // end of if (opcode == OP_ATTR_VALUE_GET)
-                    } else if (opcode == OP_ATTR_VALUE_SET) {
+                        // end of if (opcode == OP_ATT_VALUE_GET)
+                    } else if (opcode == OP_ATT_VALUE_SET) {
 
                         ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
                         TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                         TxDataBuffer[2] = RC_OK; // Return OK code
 
-                        if (id == 0x2000) {
+                        if (id == ATT_REG_ADDR) {
 
                             regAddr = RxDataBuffer[4];
 
-                        } else if (id == 0x2001) {
-                           
-                            i2c_start();
-                            i2c_send_byte(I2C_INA_ADDR << 1 | I2C_WRITE_CMD);
-                            i2c_send_byte(regAddr);
-                            i2c_send_byte(RxDataBuffer[5]);
-                            i2c_send_byte(RxDataBuffer[4]);
-                            i2c_stop();
+                        } else if (id == ATT_REG_VAL) {
+
+                            i2c_reg_write(regAddr, RxDataBuffer[5], RxDataBuffer[4]);
 
                         } else {
 
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
 
                         }

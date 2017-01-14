@@ -38,6 +38,8 @@
       <itemPath>../../common/hardware.h</itemPath>
       <itemPath>../attribute.h</itemPath>
       <itemPath>../main.c</itemPath>
+      <itemPath>../luke_func.c</itemPath>
+      <itemPath>../luke_func.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
