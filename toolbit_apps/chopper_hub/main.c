@@ -39,12 +39,14 @@
 static uint8_t hid_interfaces[] = {0};
 #endif
 
-#define ATT_USB_PORT_CTRL 0x1000  // 4 byte
 
+#define GPIO_PORTC_MASK 0x34  // RC2/RC4/RC5 is used as GPIO0/1/2
 
 void chopper_init()
 {
     // Output pins to control load switches
+    LATC = 0x00;
+    ANSELC = 0x00;
     PORTC = 0x00;
     TRISC = 0xFC;  // RC0, RC1 are output pins for now
     
@@ -61,6 +63,31 @@ void chopper_init()
     INTCONbits.PEIE = 1;
 }
 
+uint8_t cnvport2gpio(uint8_t regval)
+{
+    // GPIO pin 0/1/2 correspond to RC2/RC4/RC5 of PIC
+    uint8_t cnvres = 0;
+    if (regval & 0x04)
+         cnvres = 0x01;
+    if (regval & 0x10)
+         cnvres |= 0x02;
+    if (regval & 0x20)
+         cnvres |= 0x04;
+    return cnvres;
+}
+
+uint8_t cnvgpio2port(uint8_t attval)
+{
+    // GPIO pin 0/1/2 correspond to RC2/RC4/RC5 of PIC
+    uint8_t cnvres = 0;
+    if (attval & 0x01)
+         cnvres = 0x04;
+    if (attval & 0x02)
+         cnvres |= 0x10;
+    if (attval & 0x04)
+         cnvres |= 0x20;
+    return cnvres;
+}
 
 int main(void) {
     uint8_t portCtrl[4];
@@ -101,49 +128,67 @@ int main(void) {
                     uint8_t opcode = RxDataBuffer[1];
                     TxDataBuffer[1] = opcode; // echo back operation code
 
-                    if (opcode == OP_ATTR_VALUE_GET) {
+                    if (opcode == OP_ATT_VALUE_GET) {
 
                         ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
                         TxDataBuffer[2] = RC_OK; // Return OK code
+                        TxDataBuffer[0] = PROTOCOL_VERSION;
 
                         if (id == ATT_PRODUCT_NAME) {
 
                             uint8_t len = strlen(PRODUCT_NAME) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], PRODUCT_NAME, len);
 
                         } else if (id == ATT_PRODUCT_REVISION) {
 
                             uint8_t len = strlen(PRODUCT_REVISION) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], PRODUCT_REVISION, len);
 
                         } else if (id == ATT_PRODUCT_SERIAL) {
 
                             uint8_t len = strlen(PRODUCT_SERIAL) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], PRODUCT_SERIAL, len);
 
                         } else if (id == ATT_FIRM_VERSION) {
 
                             uint8_t len = strlen(FIRM_VERSION) + 1; // +1 for NULL
-                            TxDataBuffer[0] = PROTOCOL_VERSION | len + 3; // packet length
+                            TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
 
                         } else if (id == ATT_USB_PORT_CTRL) {
 
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 4 + 3; // packet length
+                            TxDataBuffer[0] |= 4 + 3; // packet length
                             TxDataBuffer[3] = portCtrl[0];
                             TxDataBuffer[4] = portCtrl[1];
                             TxDataBuffer[5] = portCtrl[2];
                             TxDataBuffer[6] = portCtrl[3];
+                                        
+                        } else if (id == ATT_GPIO_INOUT_MODE) {
+
+                            TxDataBuffer[0] |= 4 + 3; // packet length
+                            TxDataBuffer[3] = cnvport2gpio(TRISC);
+                            TxDataBuffer[4] = 0;
+                            TxDataBuffer[5] = 0;
+                            TxDataBuffer[6] = 0;
+                            
+                        } else if (id == ATT_GPIO_RW_VAL) {
+
+                            TxDataBuffer[0] |= 4 + 3; // packet length
+                            TxDataBuffer[3] = cnvport2gpio(PORTC);
+                            TxDataBuffer[4] = 0;
+                            TxDataBuffer[5] = 0;
+                            TxDataBuffer[6] = 0;
                             
                         } else {
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
+                            TxDataBuffer[0] |= 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
                         }
-
-                    } else if (opcode == OP_ATTR_VALUE_SET) {
+                        
+                        // end of if (opcode == OP_ATT_VALUE_GET)
+                    } else if (opcode == OP_ATT_VALUE_SET) {
 
                         ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
                         TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
@@ -161,7 +206,15 @@ int main(void) {
                             //portCtrl[1] = RxDataBuffer[5];
                             //portCtrl[2] = RxDataBuffer[6];
                             //portCtrl[3] = RxDataBuffer[7];
-                            
+
+                        } else if (id == ATT_GPIO_INOUT_MODE) {
+
+                            TRISC = TRISC & ~GPIO_PORTC_MASK | cnvgpio2port(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
+                        
+                        } else if (id == ATT_GPIO_RW_VAL) {
+
+                            PORTC = PORTC & ~GPIO_PORTC_MASK | cnvgpio2port(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
+                                                        
                         } else {
 
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length

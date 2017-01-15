@@ -121,7 +121,7 @@ int main(void) {
                             TxDataBuffer[0] |= 4 + 3; // packet length
                             TxDataBuffer[3] = 0; // return setting... 
                             
-                        } else if (id == ATT_REG_VAL) {
+                        } else if (id == ATT_I2C0_RW_2BYTE) {
 
                             TxDataBuffer[0]  |= 2 + 3; // packet length
                             uint16_t dat = i2c_reg_read(regAddr);
@@ -140,11 +140,11 @@ int main(void) {
                         TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                         TxDataBuffer[2] = RC_OK; // Return OK code
 
-                        if (id == ATT_REG_ADDR) {
+                        if (id == ATT_I2C0_ADDR) {
 
                             regAddr = RxDataBuffer[4];
 
-                        } else if (id == ATT_REG_VAL) {
+                        } else if (id == ATT_I2C0_RW_2BYTE) {
 
                             i2c_reg_write(regAddr, RxDataBuffer[5], RxDataBuffer[4]);
 

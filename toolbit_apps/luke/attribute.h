@@ -39,12 +39,23 @@ typedef enum
 	ATT_PRODUCT_REVISION = 0x0001,
 	ATT_PRODUCT_SERIAL   = 0x0002,
 	ATT_FIRM_VERSION     = 0x0003,
-	ATT_VOLTAGE_RANGE    = 0x1100,
-	ATT_VOLTAGE          = 0x1101,
-	ATT_CURRENT_RANGE    = 0x1102,
-	ATT_CURRENT          = 0x1103,
-	ATT_REG_ADDR         = 0x2000,
-	ATT_REG_VAL          = 0x2001,
+            
+    // Platform specific attribute ID           
+    ATT_GPIO_CONFIGA     = 0x1010,
+    ATT_GPIO_CONFIGB     = 0x1011,
+    ATT_GPIO_CONFIGC     = 0x1012,
+    ATT_GPIO_PORTA       = 0x1020,
+    ATT_GPIO_PORTB       = 0x1021,
+    ATT_GPIO_PORTC       = 0x1022,
+    ATT_I2C0_ADDR        = 0x1030,
+    ATT_I2C0_RW_1BYTE    = 0x1031,    
+    ATT_I2C0_RW_2BYTE    = 0x1032,
+
+    // Product specific attribute ID
+	ATT_VOLTAGE_RANGE    = 0x8100,
+	ATT_VOLTAGE          = 0x8101,
+	ATT_CURRENT_RANGE    = 0x8102,
+	ATT_CURRENT          = 0x8103
 } AttributionID;
 
 /*
