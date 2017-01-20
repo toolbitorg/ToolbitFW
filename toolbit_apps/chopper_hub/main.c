@@ -55,38 +55,43 @@ void chopper_init()
     ANSELA = 0x00;
     PORTA = 0x00;
     TRISA = 0xFF;
+
+    WPUA = 0x38;   // Enable weak pull-up of RA3, RA4, RA5
+    OPTION_REGbits.nWPUEN = 0;
+    
     IOCAP = 0x00;
     IOCAN = 0x30;  // RA4, RA5 are set as negative edge interrupt pins
     IOCAF = 0x00;  // Clear flags
     // Enable interrupt-on-change
     INTCONbits.IOCIE = 1; 
     INTCONbits.PEIE = 1;
+    INTCONbits.GIE = 1;
 }
 
-uint8_t cnvport2gpio(uint8_t regval)
+uint8_t cnvReg2Att(uint8_t regval)
 {
     // GPIO pin 0/1/2 correspond to RC2/RC4/RC5 of PIC
-    uint8_t cnvres = 0;
+    uint8_t attval = 0;
     if (regval & 0x04)
-         cnvres = 0x01;
+         attval = 0x01;
     if (regval & 0x10)
-         cnvres |= 0x02;
+         attval |= 0x02;
     if (regval & 0x20)
-         cnvres |= 0x04;
-    return cnvres;
+         attval |= 0x04;
+    return attval;
 }
 
-uint8_t cnvgpio2port(uint8_t attval)
+uint8_t cnvAtt2Reg(uint8_t attval)
 {
     // GPIO pin 0/1/2 correspond to RC2/RC4/RC5 of PIC
-    uint8_t cnvres = 0;
+    uint8_t regval = 0;
     if (attval & 0x01)
-         cnvres = 0x04;
+         regval = 0x04;
     if (attval & 0x02)
-         cnvres |= 0x10;
+         regval |= 0x10;
     if (attval & 0x04)
-         cnvres |= 0x20;
-    return cnvres;
+         regval |= 0x20;
+    return regval;
 }
 
 int main(void) {
@@ -169,15 +174,15 @@ int main(void) {
                         } else if (id == ATT_GPIO_INOUT_MODE) {
 
                             TxDataBuffer[0] |= 4 + 3; // packet length
-                            TxDataBuffer[3] = cnvport2gpio(TRISC);
+                            TxDataBuffer[3] = cnvReg2Att(TRISC);
                             TxDataBuffer[4] = 0;
                             TxDataBuffer[5] = 0;
                             TxDataBuffer[6] = 0;
                             
-                        } else if (id == ATT_GPIO_RW_VAL) {
+                        } else if (id == ATT_GPIO_RW) {
 
                             TxDataBuffer[0] |= 4 + 3; // packet length
-                            TxDataBuffer[3] = cnvport2gpio(PORTC);
+                            TxDataBuffer[3] = cnvReg2Att(PORTC);
                             TxDataBuffer[4] = 0;
                             TxDataBuffer[5] = 0;
                             TxDataBuffer[6] = 0;
@@ -209,11 +214,11 @@ int main(void) {
 
                         } else if (id == ATT_GPIO_INOUT_MODE) {
 
-                            TRISC = TRISC & ~GPIO_PORTC_MASK | cnvgpio2port(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
+                            TRISC = TRISC & ~GPIO_PORTC_MASK | cnvAtt2Reg(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
                         
-                        } else if (id == ATT_GPIO_RW_VAL) {
+                        } else if (id == ATT_GPIO_RW) {
 
-                            PORTC = PORTC & ~GPIO_PORTC_MASK | cnvgpio2port(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
+                            PORTC = PORTC & ~GPIO_PORTC_MASK | cnvAtt2Reg(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
                                                         
                         } else {
 
@@ -353,12 +358,11 @@ int8_t app_set_protocol_callback(uint8_t interface, uint8_t report_id) {
 
 void interrupt isr() {
     if(INTCONbits.IOCIF) {
-        // Over current happens
         if(IOCAFbits.IOCAF4) {
-            PORTCbits.RC1 = 0;
+            PORTCbits.RC1 = 1;  // Turn off USB port due to over current
         }
         if(IOCAFbits.IOCAF5) {
-            PORTCbits.RC0 = 0;        
+            PORTCbits.RC0 = 1;  // Turn off USB port due to over current
         }
         IOCAF = 0x00;  // Clear flags
     }
