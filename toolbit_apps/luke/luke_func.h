@@ -30,6 +30,7 @@
 #define INA3221_MANUFACTURER_ID 0xFE
 #define INA3221_DIE_ID 0xFF
 
+/*
 typedef enum
 {
 	VOLTAGE_RANGE_AUTO = 0,
@@ -43,10 +44,19 @@ typedef enum
 	CURRENT_RANGE_LOW = 1,
 	CURRENT_RANGE_HIGH = 2
 } CurrentRange;
+*/
 
 
 void i2c_reg_write(uint8_t regAddr, uint8_t dat0, uint8_t dat1);
 uint16_t i2c_reg_read(uint8_t regAddr);
+int16_t get_shunt_voltage(uint8_t regAddr);
+void set_autorange_threshould();
+/*
+void set_voltage_range(VoltageRange r);
 void set_current_range(CurrentRange r);
+*/
+
+float get_voltage();
+float get_current();
 
 #endif

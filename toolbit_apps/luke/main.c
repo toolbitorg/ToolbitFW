@@ -48,6 +48,7 @@ void luke_init() {
     PORTC = 0x00;
     TRISC = 0x03;  // RC0, RC1: input, other pins: output
     i2c_enable();
+    set_autorange_threshould();
 }
 
 int main(void) {
@@ -116,17 +117,26 @@ int main(void) {
                             TxDataBuffer[0] |= len + 3; // packet length
                             memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
 
-                        } else if (id == ATT_VOLTAGE) {
-
-                            TxDataBuffer[0] |= 4 + 3; // packet length
-                            TxDataBuffer[3] = 0; // return setting... 
-                            
                         } else if (id == ATT_I2C0_RW_2BYTE) {
 
                             TxDataBuffer[0]  |= 2 + 3; // packet length
                             uint16_t dat = i2c_reg_read(regAddr);
                             TxDataBuffer[4] = dat >> 8; 
                             TxDataBuffer[3] = dat;
+                            
+                        } else if (id == ATT_VOLTAGE) {
+
+                            TxDataBuffer[0] |= 4 + 3; // packet length
+                            float volt = get_voltage();
+                            TxDataBuffer[3] = 0x00;
+                            memcpy(&TxDataBuffer[4], &volt, 3);
+                                                       
+                        } else if (id == ATT_CURRENT) {
+
+                            TxDataBuffer[0] |= 4 + 3; // packet length
+                            float curr = get_current();
+                            TxDataBuffer[3] = 0x00;
+                            memcpy(&TxDataBuffer[4], &curr, 3);
                             
                         } else {
                             TxDataBuffer[0] |= 3; // packet length
