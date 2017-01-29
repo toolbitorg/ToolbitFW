@@ -95,7 +95,7 @@ float get_current()
 //    float high_curr = get_shunt_voltage(INA3221_SHUNTV_2) * 0.00080;   // 0.80mA/bit
     float high_curr = get_shunt_voltage(INA3221_SHUNTV_2) * 0.00080 * 5.0 / 4.0;   // 0.80mA/bit
 
-    if(high_curr>0.150)
+    if(high_curr>0.150 | high_curr<-0.15)
         return high_curr;
     else
         return low_curr;
