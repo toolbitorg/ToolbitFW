@@ -85,8 +85,11 @@ void set_current_range(CurrentRange r)
 float get_voltage()
 {          
     float volt = get_shunt_voltage(INA3221_SHUNTV_3);
-    
-    return volt * 0.01481;   // 14.81mV/bit
+
+//    return volt;
+//    return volt * 0.001498;   // 1.498mV/bit
+//    return volt * 0.01485;   // 14.85mV/bit
+    return volt * 0.0041202;   // 0.0041202mV/bit
 }
 
 float get_current()
