@@ -150,7 +150,7 @@ int main(void) {
                         TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                         TxDataBuffer[2] = RC_OK; // Return OK code
 
-                        if (id == ATT_I2C0_ADDR) {
+                        if (id == ATT_I2C0_REG_ADDR) {
 
                             regAddr = RxDataBuffer[4];
 

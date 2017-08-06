@@ -41,9 +41,10 @@ typedef enum
 	ATT_FIRM_VERSION     = 0x0003,
 
     // Platform commom attribute ID
-    ATT_I2C0_ADDR        = 0x1030,     
-    ATT_I2C0_RW_1BYTE    = 0x1031,    
-    ATT_I2C0_RW_2BYTE    = 0x1032,
+    ATT_I2C0_DEVICE_ADDR = 0x1400,
+    ATT_I2C0_REG_ADDR    = 0x1401,
+    ATT_I2C0_RW_1BYTE    = 0x1402,
+    ATT_I2C0_RW_2BYTE    = 0x1403,
 
     // Product specific attribute ID
 	ATT_VOLTAGE_RANGE    = 0x8100,
