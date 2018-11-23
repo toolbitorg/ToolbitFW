@@ -41,9 +41,6 @@ int16_t get_shunt_voltage(uint8_t regAddr)
 
 void set_autorange_threshould()
 {
-        // Set the swiching threshould to assert WARNING pin of INA3221
-        i2c_reg_write(INA3221_WARNING_LIMIT_3, 0x5F, 0xF8);
-
     	// Set the swiching threshould 150mA to assert CRITICAL pin of INA3221
         i2c_reg_write(INA3221_CRITICAL_LIMIT_2, 0x05, 0xD8);        
 }
@@ -84,12 +81,16 @@ void set_current_range(CurrentRange r)
 
 float get_voltage()
 {          
-    float volt = get_shunt_voltage(INA3221_SHUNTV_3);
+    float volt = get_shunt_voltage(INA3221_SHUNTV_3) * 0.0015214;   // 1.5214 mV/bit
 
-//    return volt;
-//    return volt * 0.001498;   // 1.498mV/bit
-//    return volt * 0.01485;   // 14.85mV/bit
-    return volt * 0.0041202;   // 0.0041202mV/bit
+    // Low range
+    if(volt>-6.05 && volt<6.05) {
+        return volt;
+    }
+    
+    volt = get_shunt_voltage(INA3221_BUSV_3) * 0.304296 - 62.761;   // 304.296 mV/bit
+    // High range
+    return volt;  
 }
 
 float get_current()
