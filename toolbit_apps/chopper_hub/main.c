@@ -112,7 +112,7 @@ int main(void) {
     
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
-            //                uint8_t len;
+
             const unsigned char *RxDataBuffer;
             unsigned char *TxDataBuffer = usb_get_in_buffer(1);
             /* Data received from host */
@@ -170,7 +170,7 @@ int main(void) {
                             TxDataBuffer[4] = portCtrl[1];
                             TxDataBuffer[5] = portCtrl[2];
                             TxDataBuffer[6] = portCtrl[3];
-                                        
+
                         } else if (id == ATT_GPIO_INOUT_MODE) {
 
                             TxDataBuffer[0] |= 4 + 3; // packet length
@@ -178,20 +178,20 @@ int main(void) {
                             TxDataBuffer[4] = 0;
                             TxDataBuffer[5] = 0;
                             TxDataBuffer[6] = 0;
-                            
+
                         } else if (id == ATT_GPIO_RW) {
 
                             TxDataBuffer[0] |= 4 + 3; // packet length
                             TxDataBuffer[3] = cnvReg2Att(PORTC);
-                            TxDataBuffer[4] = 0;
+                            TxDataBuffer[4] = PORTA;
                             TxDataBuffer[5] = 0;
                             TxDataBuffer[6] = 0;
-                            
+
                         } else {
                             TxDataBuffer[0] |= 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
                         }
-                        
+
                         // end of if (opcode == OP_ATT_VALUE_GET)
                     } else if (opcode == OP_ATT_VALUE_SET) {
 
@@ -215,11 +215,11 @@ int main(void) {
                         } else if (id == ATT_GPIO_INOUT_MODE) {
 
                             TRISC = TRISC & ~GPIO_PORTC_MASK | cnvAtt2Reg(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
-                        
+
                         } else if (id == ATT_GPIO_RW) {
 
                             PORTC = PORTC & ~GPIO_PORTC_MASK | cnvAtt2Reg(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
-                                                        
+
                         } else {
 
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
@@ -233,8 +233,30 @@ int main(void) {
                     usb_send_in_buffer(1, EP_1_IN_LEN);
 
                 }
-            }
+            }            
             usb_arm_out_endpoint(1);
+        }
+        
+        if (usb_is_configured() && !(usb_out_endpoint_has_data(1))) {
+          
+            if (PORTA==0x30) {
+
+                unsigned char *TxDataBuffer = usb_get_in_buffer(1);
+
+                TxDataBuffer[0] = PROTOCOL_VERSION;
+                TxDataBuffer[0] |= 4; // packet length
+                TxDataBuffer[1] = EVT_NOTIFY;
+                TxDataBuffer[2] = 0x01;
+                TxDataBuffer[3] = 0x2F;
+
+                // Send response
+                memcpy(usb_get_in_buffer(1), TxDataBuffer, EP_1_IN_LEN);
+                usb_send_in_buffer(1, EP_1_IN_LEN);                    
+
+                while (PORTA==0x30)
+                    ;
+            }
+
         }
 
 #ifndef USB_USE_INTERRUPTS

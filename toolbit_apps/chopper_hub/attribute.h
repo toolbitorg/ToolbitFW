@@ -41,8 +41,8 @@ typedef enum
 	ATT_FIRM_VERSION     = 0x0003,
             
     // Platform commom attribute ID
-    ATT_GPIO_INOUT_MODE  = 0x1000,
-    ATT_GPIO_RW          = 0x1003,
+    ATT_GPIO_INOUT_MODE  = 0x1200,
+    ATT_GPIO_RW          = 0x1203,
 
     // Product specific attribute ID
     ATT_USB_PORT_CTRL    = 0x8000,
