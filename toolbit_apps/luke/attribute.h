@@ -45,9 +45,9 @@ typedef enum
     ATT_I2C0_REG_ADDR    = 0x1401,
     ATT_I2C0_RW_1BYTE    = 0x1402,
     ATT_I2C0_RW_2BYTE    = 0x1403,
-
+            
     // Product specific attribute ID
-	ATT_VOLTAGE_RANGE    = 0x8100,
+    ATT_VOLTAGE_RANGE    = 0x8100,
 	ATT_VOLTAGE          = 0x8101,
 	ATT_CURRENT_RANGE    = 0x8102,
 	ATT_CURRENT          = 0x8103
@@ -63,9 +63,14 @@ struct Attribution{
  */
 
 static const ROMPTR char PRODUCT_NAME[]     = "Luke";
-static const ROMPTR char PRODUCT_REVISION[] = "0.1";
-static const ROMPTR char PRODUCT_SERIAL[]   = "SN0001";
 static const ROMPTR char FIRM_VERSION[]     = "0.1";
+// If PC2 input is low/high, PRODUCT_REVISION = 0/1
+// PRODUCT_SERIAL is stored in HEF memory
+#define NVM_PRODUCT_SERIAL_ADDR   0x1FF8
+#define NVM_PRODUCT_SERIAL_SIZE   8
+static const ROMPTR uint32_t NVM_PRODUCT_SERIAL0 @ NVM_PRODUCT_SERIAL_ADDR   = 1;
+static const ROMPTR uint32_t NVM_PRODUCT_SERIAL1 @ NVM_PRODUCT_SERIAL_ADDR+4 = 0;
+
 
 #endif	/* ATTRIBUTE_H__ */
 

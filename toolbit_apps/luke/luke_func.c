@@ -3,6 +3,91 @@
 #include "i2c-lib.h"
 #include "attribute.h"
 
+#ifdef __C18
+#define ROMPTR rom
+#else
+#define ROMPTR
+#endif
+
+#define I2C_INA_ADDR  0x40
+#define I2C_WRITE_CMD 0
+#define I2C_READ_CMD  1
+
+#define INA3221_CONFG     0x00
+#define INA3221_SHUNTV_1 0x01
+#define INA3221_BUSV_1   0x02
+#define INA3221_SHUNTV_2 0x03
+#define INA3221_BUSV_2   0x04
+#define INA3221_SHUNTV_3 0x05
+#define INA3221_BUSV_3   0x06
+#define INA3221_CRITICAL_LIMIT_1 0x07
+#define INA3221_WARNING_LIMIT_1  0x08
+#define INA3221_CRITICAL_LIMIT_2 0x09
+#define INA3221_WARNING_LIMIT_2  0x0A
+#define INA3221_CRITICAL_LIMIT_3 0x0B
+#define INA3221_WARNING_LIMIT_3  0x0C
+#define INA3221_SHUNTV_SUM       0x0D
+#define INA3221_SHUNTV_SUM_LIMIT 0x0E
+#define INA3221_MASK_ENABLE      0x0F
+#define INA3221_POWER_VALID_UPPER_LIMIT 0x10
+#define INA3221_POWER_VALID_LOWER_LIMIT 0x11
+#define INA3221_MANUFACTURER_ID 0xFE
+#define INA3221_DIE_ID 0xFF
+
+#define CURRENT_RANGE_THRESHOULD  0x05D8
+#define CURRENT_RANGE_THRESHOULD0 0x05
+#define CURRENT_RANGE_THRESHOULD1 0xD8
+#define VOLTAGE_RANGE_THRESHOULD  4080
+
+#define NVM_LOW_CURRENT_SLOPE_ADDR   0x1F80
+#define NVM_LOW_CURRENT_OFFSET_ADDR  0x1F83
+#define NVM_HIGH_CURRENT_SLOPE_ADDR  0x1F86
+#define NVM_HIGH_CURRENT_OFFSET_ADDR 0x1F89
+#define NVM_LOW_VOLTAGE_SLOPE_ADDR   0x1F8C
+#define NVM_LOW_VOLTAGE_OFFSET_ADDR  0x1F8F
+#define NVM_HIGH_VOLTAGE_SLOPE_ADDR  0x1F92
+#define NVM_HIGH_VOLTAGE_OFFSET_ADDR 0x1F95
+
+static const ROMPTR float NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR    = 0.000040;  // 40.0uA/bit
+static const ROMPTR float NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR   = -0.0000400003; 
+static const ROMPTR float NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR   = 0.00080 * 5.0 / 4.0;  // 0.80mA/bit
+static const ROMPTR float NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR  = 0.0;
+static const ROMPTR float NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR    = 0.0015214;  // 1.5214 mV/bit
+static const ROMPTR float NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR   = 0.0;
+static const ROMPTR float NVM_HIGH_VOLTAGE_SLOPE  @ NVM_HIGH_VOLTAGE_SLOPE_ADDR   = 0.304296;   // 304.296 mV/bit
+static const ROMPTR float NVM_HIGH_VOLTAGE_OFFSET @ NVM_HIGH_VOLTAGE_OFFSET_ADDR  = -62.761;
+
+float lowCurrentSlope;
+float lowCurrentOffset;
+float highCurrentSlope;
+float highCurrentOffset;
+float lowVoltageSlope;
+float lowVoltageOffset;
+float highVoltageSlope;
+float highVoltageOffset;
+
+void luke_init() {
+    LATC = 0x0;
+    ANSELC = 0x00;  // All pins are set as digital I/O
+    PORTC = 0x00;
+    TRISC = 0x07;  // RC0, RC1, RC2: input, other pins: output
+
+    WPUA = 0x38;   // Enable weak pull-up of RA3, RA4, RA5
+    OPTION_REGbits.nWPUEN = 0;
+
+    // Load parameters from HEF memory
+    lowCurrentSlope   = NVM_LOW_CURRENT_SLOPE;
+    lowCurrentOffset  = NVM_LOW_CURRENT_OFFSET;
+    highCurrentSlope  = NVM_HIGH_CURRENT_SLOPE;
+    highCurrentOffset = NVM_HIGH_CURRENT_OFFSET;
+    lowVoltageSlope   = NVM_LOW_VOLTAGE_SLOPE;
+    lowVoltageOffset  = NVM_LOW_VOLTAGE_OFFSET;
+    highVoltageSlope  = NVM_HIGH_VOLTAGE_SLOPE;
+    highVoltageOffset = NVM_HIGH_VOLTAGE_OFFSET;
+    
+    i2c_enable();
+    set_autorange_threshould();
+}
 
 void i2c_reg_write(uint8_t regAddr, uint8_t dat0, uint8_t dat1)
 {
@@ -41,66 +126,26 @@ int16_t get_shunt_voltage(uint8_t regAddr)
 
 void set_autorange_threshould()
 {
-    	// Set the swiching threshould 150mA to assert CRITICAL pin of INA3221
-        i2c_reg_write(INA3221_CRITICAL_LIMIT_2, 0x05, 0xD8);        
+    // Set the swiching threshould 150mA to assert CRITICAL pin of INA3221
+    i2c_reg_write(INA3221_CRITICAL_LIMIT_2, CURRENT_RANGE_THRESHOULD0, CURRENT_RANGE_THRESHOULD1);
 }
-
-/*        
-void set_voltage_range(VoltageRange r)
-{            
-	if (r == VOLTAGE_RANGE_AUTO) {
-    	// Set the swiching threshould to assert WARNING pin of INA3221
-        i2c_reg_write(INA3221_WARNING_LIMIT_3, 0x5F, 0xF8);
-    }
-    else if (r == VOLTAGE_RANGE_HIGH) {
-    	// Set the lowest limit to assert WARNING pin of INA3221
-        i2c_reg_write(INA3221_WARNING_LIMIT_3, 0x5F, 0xF8);
-	}
-	else if (r == VOLTAGE_RANGE_LOW) {
-		// Set the highest limit to deassert WARNING pin of INA3221
-        i2c_reg_write(INA3221_WARNING_LIMIT_3, 0x7F, 0xF8);
-	}
-}
-
-void set_current_range(CurrentRange r)
-{            
-	if (r == CURRENT_RANGE_AUTO) {
-    	// Set the swiching threshould 150mA to assert CRITICAL pin of INA3221
-        i2c_reg_write(INA3221_CRITICAL_LIMIT_2, 0x05, 0xD8);        
-    }
-    else if (r == CURRENT_RANGE_HIGH) {
-    	// Set the lowest limit to assert CRITICAL pin of INA3221
-        i2c_reg_write(INA3221_CRITICAL_LIMIT_2, 0x00, 0x00);
-	}
-	else if (r == CURRENT_RANGE_LOW) {
-		// Set the highest limit to deassert CRITICAL pin of INA3221
-        i2c_reg_write(INA3221_CRITICAL_LIMIT_2, 0x7F, 0xF8);
-	}
-}
- */
 
 float get_voltage()
-{          
-    float volt = get_shunt_voltage(INA3221_SHUNTV_3) * 0.0015214;   // 1.5214 mV/bit
+{
+    int16_t val = get_shunt_voltage(INA3221_SHUNTV_3);
 
-    // Low range
-    if(volt>-6.05 && volt<6.05) {
-        return volt;
-    }
-    
-    volt = get_shunt_voltage(INA3221_BUSV_3) * 0.304296 - 62.761;   // 304.296 mV/bit
-    // High range
-    return volt;  
+    if(val<VOLTAGE_RANGE_THRESHOULD | val>-VOLTAGE_RANGE_THRESHOULD)
+        return val * lowVoltageSlope + lowVoltageOffset;
+    else
+        return get_shunt_voltage(INA3221_BUSV_3) * highVoltageSlope + highVoltageOffset;
 }
 
 float get_current()
-{          
-    float low_curr = get_shunt_voltage(INA3221_SHUNTV_1)  * 0.000040;  // 40.0uA/bit
-//    float high_curr = get_shunt_voltage(INA3221_SHUNTV_2) * 0.00080;   // 0.80mA/bit
-    float high_curr = get_shunt_voltage(INA3221_SHUNTV_2) * 0.00080 * 5.0 / 4.0;   // 0.80mA/bit
-
-    if(high_curr>0.150 | high_curr<-0.15)
-        return high_curr;
+{
+    int16_t val = get_shunt_voltage(INA3221_SHUNTV_2);
+    
+    if(val<CURRENT_RANGE_THRESHOULD | val>-CURRENT_RANGE_THRESHOULD)
+        return get_shunt_voltage(INA3221_SHUNTV_1) * lowCurrentSlope + lowCurrentOffset;
     else
-        return low_curr;
+        return val * highCurrentSlope + highCurrentOffset;
 }

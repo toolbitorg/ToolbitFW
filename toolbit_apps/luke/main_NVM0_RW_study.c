@@ -42,6 +42,16 @@
 static uint8_t hid_interfaces[] = {0};
 #endif
 
+#define NVM0_ADDRESS 0x1FE0
+
+void luke_init() {
+    LATC = 0x0;
+    ANSELC = 0xC;
+    PORTC = 0x00;
+    TRISC = 0x03;  // RC0, RC1: input, other pins: output
+    i2c_enable();
+    set_autorange_threshould();
+}
 
 int main(void) {
     hardware_init();
@@ -54,7 +64,7 @@ int main(void) {
     usb_init();
 
     uint8_t  regAddr = 0;
-    
+
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
             //                uint8_t len;
@@ -77,103 +87,105 @@ int main(void) {
 
                     uint8_t opcode = RxDataBuffer[1];
                     TxDataBuffer[1] = opcode; // echo back operation code
-                    ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];                        
-                    uint8_t len;
-                    
-                    switch (opcode) {
-                        case OP_ATT_VALUE_GET:
-                            TxDataBuffer[2] = RC_OK; // Return OK code
-                            TxDataBuffer[0] = PROTOCOL_VERSION;
 
-                            switch (id) {
-                                case ATT_PRODUCT_NAME:
-                                    len = strlen(PRODUCT_NAME) + 1; // +1 for NULL
-                                    TxDataBuffer[0] |= len + 3; // packet length
-                                    memcpy(&TxDataBuffer[3], PRODUCT_NAME, len);
-                                    break;
-                                    
-                                case ATT_PRODUCT_REVISION:
-                                    TxDataBuffer[0] |= 2 + 3; // packet length
-                                    TxDataBuffer[3] = '0' + PORTCbits.RC2;
-                                    TxDataBuffer[4] = NULL;
-                                    break;
-                            
-                                case ATT_PRODUCT_SERIAL:
-                                /*  TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
-                                    for (uint8_t i=0; i<NVM_PRODUCT_SERIAL_SIZE; i++) {
-                                    // Please note that 1 word of HEF is 14bits but lower 8bits is high-endurance
-                                    TxDataBuffer[i+3] = (uint8_t) FLASH_ReadWord(NVM_PRODUCT_SERIAL_ADDR + i);
-                                } */
-                                    TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
-                                    memcpy(&TxDataBuffer[3], NVM_PRODUCT_SERIAL_ADDR, NVM_PRODUCT_SERIAL_SIZE);
-                                    break;
-                                
-                                case ATT_FIRM_VERSION:
-                                    len = strlen(FIRM_VERSION) + 1; // +1 for NULL
-                                    TxDataBuffer[0] |= len + 3; // packet length
-                                    memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
-                                    break;
-                                    
-                                case ATT_I2C0_RW_2BYTE:
-                                    TxDataBuffer[0]  |= 2 + 3; // packet length
-                                    uint16_t dat = i2c_reg_read(regAddr);
-                                    TxDataBuffer[4] = dat >> 8; 
-                                    TxDataBuffer[3] = dat;
-                                    break;
-                                    
-                                case ATT_VOLTAGE:
-                                    TxDataBuffer[0] |= 4 + 3; // packet length
-                                    float volt = get_voltage();
-                                    TxDataBuffer[3] = 0x00;
-                                    memcpy(&TxDataBuffer[4], &volt, 3);
-                                    break;
-                                
-                                case ATT_CURRENT:
-                                    TxDataBuffer[0] |= 4 + 3; // packet length
-                                    float curr = get_current();
-                                    TxDataBuffer[3] = 0x00;
-                                    memcpy(&TxDataBuffer[4], &curr, 3);
-                                    break;
+                    if (opcode == OP_ATT_VALUE_GET) {
 
-                                default:
-                                    TxDataBuffer[0] |= 3; // packet length
-                                    TxDataBuffer[2] = RC_FAIL; // Return error code
-                                    break;
-                                    
-                            } // end of switch (id)
-                            break;
+                        ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
+                        TxDataBuffer[2] = RC_OK; // Return OK code
+                        TxDataBuffer[0] = PROTOCOL_VERSION;
+                        
+                        if (id == ATT_PRODUCT_NAME) {
+
+                            uint8_t len = strlen(PRODUCT_NAME) + 1; // +1 for NULL
+                            TxDataBuffer[0] |= len + 3; // packet length
+                            memcpy(&TxDataBuffer[3], PRODUCT_NAME, len);
+
+                        } else if (id == ATT_PRODUCT_REVISION) {
+
+                            uint8_t len = strlen(PRODUCT_REVISION) + 1; // +1 for NULL
+                            TxDataBuffer[0] |= len + 3; // packet length
+                            memcpy(&TxDataBuffer[3], PRODUCT_REVISION, len);
+
+                        } else if (id == ATT_PRODUCT_SERIAL) {
+
+                            uint8_t len = strlen(PRODUCT_SERIAL) + 1; // +1 for NULL
+                            TxDataBuffer[0] |= len + 3; // packet length
+                            memcpy(&TxDataBuffer[3], PRODUCT_SERIAL, len);
+
+                        } else if (id == ATT_FIRM_VERSION) {
+
+                            uint8_t len = strlen(FIRM_VERSION) + 1; // +1 for NULL
+                            TxDataBuffer[0] |= len + 3; // packet length
+                            memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
+
+                        } else if (id == ATT_NVM0) {
+
+                            TxDataBuffer[0]  |= WRITE_FLASH_BLOCKSIZE + 3; // packet length
+                            for (uint8_t i=0; i<WRITE_FLASH_BLOCKSIZE; i++) {
+                                // Please note that 1 word of HEF is 14bits
+                                TxDataBuffer[i+3] = (uint8_t) FLASH_ReadWord(NVM0_ADDRESS + i);  
+                            }
                             
-                        case  OP_ATT_VALUE_SET:
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
-                            TxDataBuffer[2] = RC_OK; // Return OK code
+                        } else if (id == ATT_I2C0_RW_2BYTE) {
+
+                            TxDataBuffer[0]  |= 2 + 3; // packet length
+                            uint16_t dat = i2c_reg_read(regAddr);
+                            TxDataBuffer[4] = dat >> 8; 
+                            TxDataBuffer[3] = dat;
                             
-                            switch (id) {
-                                case ATT_I2C0_REG_ADDR:
-                                    regAddr = RxDataBuffer[4];
-                                    break;
-                                    
-                                case ATT_I2C0_RW_2BYTE:
-                                    i2c_reg_write(regAddr, RxDataBuffer[5], RxDataBuffer[4]);
-                                    break;
-                                
-                                default:
-                                    TxDataBuffer[2] = RC_FAIL; // Return error code
-                                    break;
-                                    
-                            } // end of switch (id)
-                            break;
+                        } else if (id == ATT_VOLTAGE) {
+
+                            TxDataBuffer[0] |= 4 + 3; // packet length
+                            float volt = get_voltage();
+                            TxDataBuffer[3] = 0x00;
+                            memcpy(&TxDataBuffer[4], &volt, 3);
+                                                       
+                        } else if (id == ATT_CURRENT) {
+
+                            TxDataBuffer[0] |= 4 + 3; // packet length
+                            float curr = get_current();
+                            TxDataBuffer[3] = 0x00;
+                            memcpy(&TxDataBuffer[4], &curr, 3);
                             
-                        default:
-                            TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
+                        } else {
+                            TxDataBuffer[0] |= 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
-                            break;
-                                                        
-                    } // switch (opcode)
-                          
+                        }
+
+                        // end of if (opcode == OP_ATT_VALUE_GET)
+                    } else if (opcode == OP_ATT_VALUE_SET) {
+
+                        ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
+                        TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
+                        TxDataBuffer[2] = RC_OK; // Return OK code
+
+                        if (id == ATT_NVM0) {
+
+                            for (uint8_t i=0; i<WRITE_FLASH_BLOCKSIZE; i++) {
+                                wrBlockData[i] = RxDataBuffer[4+i];                            
+                            }
+                            FLASH_WriteBlock((uint16_t)NVM0_ADDRESS, (uint16_t*)wrBlockData);                          
+                            
+                        } else if (id == ATT_I2C0_REG_ADDR) {
+
+                            regAddr = RxDataBuffer[4];
+
+                        } else if (id == ATT_I2C0_RW_2BYTE) {
+
+                            i2c_reg_write(regAddr, RxDataBuffer[5], RxDataBuffer[4]);
+
+                        } else {
+
+                            TxDataBuffer[2] = RC_FAIL; // Return error code
+
+                        }
+                    }
+
                     // Send response
                     memcpy(usb_get_in_buffer(1), TxDataBuffer, EP_1_IN_LEN);
                     usb_send_in_buffer(1, EP_1_IN_LEN);
 
+                   
                 } // end of if (pcktVer == PROTOCOL_VERSION && pcktLen > 1)
             }
             usb_arm_out_endpoint(1);
