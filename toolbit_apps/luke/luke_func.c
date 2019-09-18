@@ -52,10 +52,10 @@ static const ROMPTR float NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR  
 static const ROMPTR float NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR   = -0.0000400003; 
 static const ROMPTR float NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR   = 0.00080 * 5.0 / 4.0;  // 0.80mA/bit
 static const ROMPTR float NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR  = 0.0;
-static const ROMPTR float NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR    = 0.0015214;  // 1.5214 mV/bit
-static const ROMPTR float NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR   = 0.0;
-static const ROMPTR float NVM_HIGH_VOLTAGE_SLOPE  @ NVM_HIGH_VOLTAGE_SLOPE_ADDR   = 0.304296;   // 304.296 mV/bit
-static const ROMPTR float NVM_HIGH_VOLTAGE_OFFSET @ NVM_HIGH_VOLTAGE_OFFSET_ADDR  = -62.761;
+static const ROMPTR float NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR    = -0.0015214;  // 1.5214 mV/bit
+static const ROMPTR float NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR   = -0.02434;
+static const ROMPTR float NVM_HIGH_VOLTAGE_SLOPE  @ NVM_HIGH_VOLTAGE_SLOPE_ADDR   = 0.304296;    // 304.296 mV/bit
+static const ROMPTR float NVM_HIGH_VOLTAGE_OFFSET @ NVM_HIGH_VOLTAGE_OFFSET_ADDR  = -62.38; //-62.76111 + 0.68359; //-62.761;
 
 float lowCurrentSlope;
 float lowCurrentOffset;
@@ -134,7 +134,7 @@ float get_voltage()
 {
     int16_t val = get_shunt_voltage(INA3221_SHUNTV_3);
 
-    if(val<VOLTAGE_RANGE_THRESHOULD | val>-VOLTAGE_RANGE_THRESHOULD)
+    if(val<VOLTAGE_RANGE_THRESHOULD && val>-VOLTAGE_RANGE_THRESHOULD)
         return val * lowVoltageSlope + lowVoltageOffset;
     else
         return get_shunt_voltage(INA3221_BUSV_3) * highVoltageSlope + highVoltageOffset;
@@ -144,7 +144,7 @@ float get_current()
 {
     int16_t val = get_shunt_voltage(INA3221_SHUNTV_2);
     
-    if(val<CURRENT_RANGE_THRESHOULD | val>-CURRENT_RANGE_THRESHOULD)
+    if(val<CURRENT_RANGE_THRESHOULD && val>-CURRENT_RANGE_THRESHOULD)
         return get_shunt_voltage(INA3221_SHUNTV_1) * lowCurrentSlope + lowCurrentOffset;
     else
         return val * highCurrentSlope + highCurrentOffset;
