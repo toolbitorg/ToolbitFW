@@ -7,3 +7,5 @@ dmm.X/dist
 dmm.X/funclist
 dmm.X/disassembly/
 dmm.X/_old/
+firmware.dfu
+firmware.hex
