@@ -1,0 +1,398 @@
+Version 4.0 HI-TECH Software Intermediate Code
+"181 ../../../usb/include\usb_ch9.h
+[; ;../../../usb/include\usb_ch9.h: 181: struct device_descriptor {
+[s S8 `uc 1 `uc 1 `us 1 `uc 1 `uc 1 `uc 1 `uc 1 `us 1 `us 1 `us 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
+[n S8 device_descriptor bLength bDescriptorType bcdUSB bDeviceClass bDeviceSubclass bDeviceProtocol bMaxPacketSize0 idVendor idProduct bcdDevice iManufacturer iProduct iSerialNumber bNumConfigurations ]
+"74 ../usb_descriptors.c
+[; ;../usb_descriptors.c: 74: const struct device_descriptor this_device_descriptor =
+[c E333 1 2 3 4 5 6 7 8 9 10 11 .. ]
+[n E333 DescriptorTypes DESC_DEVICE DESC_CONFIGURATION DESC_STRING DESC_INTERFACE DESC_ENDPOINT DESC_DEVICE_QUALIFIER DESC_OTHER_SPEED_CONFIGURATION DESC_INTERFACE_POWER DESC_OTG DESC_DEBUG DESC_INTERFACE_ASSOCIATION  ]
+"199 ../../../usb/include\usb_ch9.h
+[; ;../../../usb/include\usb_ch9.h: 199: struct configuration_descriptor {
+[s S10 `uc 1 `uc 1 `us 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
+[n S10 configuration_descriptor bLength bDescriptorType wTotalLength bNumInterfaces bConfigurationValue iConfiguration bmAttributes bMaxPower ]
+"211
+[; ;../../../usb/include\usb_ch9.h: 211: struct interface_descriptor {
+[s S19 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 ]
+[n S19 interface_descriptor bLength bDescriptorType bInterfaceNumber bAlternateSetting bNumEndpoints bInterfaceClass bInterfaceSubclass bInterfaceProtocol iInterface ]
+"92 ../../../usb/include\usb_hid.h
+[; ;../../../usb/include\usb_hid.h: 92: struct hid_descriptor {
+[s S23 `uc 1 `uc 1 `us 1 `uc 1 `uc 1 `uc 1 `us 1 ]
+[n S23 hid_descriptor bLength bDescriptorType bcdHID bCountryCode bNumDescriptors bDescriptorType2 wDescriptorLength ]
+"224 ../../../usb/include\usb_ch9.h
+[; ;../../../usb/include\usb_ch9.h: 224: struct endpoint_descriptor {
+[s S20 `uc 1 `uc 1 `uc 1 `uc 1 `us 1 `uc 1 ]
+[n S20 endpoint_descriptor bLength bDescriptorType bEndpointAddress bmAttributes wMaxPacketSize bInterval ]
+"58 ../usb_descriptors.c
+[; ;../usb_descriptors.c: 58: struct configuration_1_packet {
+[s S25 `S10 1 `S19 1 `S23 1 `S20 1 `S20 1 ]
+[n S25 configuration_1_packet config interface hid ep ep1_out ]
+"123
+[; ;../usb_descriptors.c: 123: static const struct configuration_1_packet configuration_1 =
+[c E422 33 34 35 .. ]
+[n E422 HIDDescriptorTypes DESC_HID DESC_REPORT DESC_PHYSICAL  ]
+[c E350 0 1 2 3 .. ]
+[n E350 EndpointAttributes EP_CONTROL EP_ISOCHRONOUS EP_BULK EP_INTERRUPT  ]
+"194
+[; ;../usb_descriptors.c: 194: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t lang; } str00 = {
+[s S26 `uc 1 `uc 1 `us 1 ]
+[n S26 . bLength bDescriptorType lang ]
+"200
+[; ;../usb_descriptors.c: 200: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } vendor_string = {
+[s S27 `uc 1 `uc 1 `us -> 11 `i ]
+[n S27 . bLength bDescriptorType chars ]
+"206
+[; ;../usb_descriptors.c: 206: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } product_string = {
+[s S28 `uc 1 `uc 1 `us -> 11 `i ]
+[n S28 . bLength bDescriptorType chars ]
+"212
+[; ;../usb_descriptors.c: 212: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } interface_string = {
+[s S29 `uc 1 `uc 1 `us -> 11 `i ]
+[n S29 . bLength bDescriptorType chars ]
+"74 ../usb_descriptors.c
+[; ;../usb_descriptors.c: 74: const struct device_descriptor this_device_descriptor =
+[v _this_device_descriptor `CS8 ~T0 @X0 1 e ]
+[i _this_device_descriptor
+:U ..
+:U ..
+-> -> # `S8 `ui `uc
+-> . `E333 0 `uc
+-> -> 512 `i `us
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 8 `i `uc
+-> -> 1240 `i `us
+-> -> 3776 `i `us
+-> -> 3 `i `us
+-> -> 1 `i `uc
+-> -> 2 `i `uc
+-> -> 0 `i `uc
+-> -> 1 `i `uc
+..
+..
+]
+"96
+[; ;../usb_descriptors.c: 96: static const uint8_t custom_report_descriptor[] =
+[v _custom_report_descriptor `Cuc ~T0 @X0 -> 28 `i s ]
+[i _custom_report_descriptor
+:U ..
+-> -> 6 `i `uc
+-> -> 0 `i `uc
+-> -> 255 `i `uc
+-> -> 9 `i `uc
+-> -> 1 `i `uc
+-> -> 161 `i `uc
+-> -> 1 `i `uc
+-> -> 25 `i `uc
+-> -> 1 `i `uc
+-> -> 41 `i `uc
+-> -> 64 `i `uc
+-> -> 21 `i `uc
+-> -> 1 `i `uc
+-> -> 37 `i `uc
+-> -> 64 `i `uc
+-> -> 117 `i `uc
+-> -> 8 `i `uc
+-> -> 149 `i `uc
+-> -> 64 `i `uc
+-> -> 129 `i `uc
+-> -> 0 `i `uc
+-> -> 25 `i `uc
+-> -> 1 `i `uc
+-> -> 41 `i `uc
+-> -> 64 `i `uc
+-> -> 145 `i `uc
+-> -> 0 `i `uc
+-> -> 192 `i `uc
+..
+]
+"123
+[; ;../usb_descriptors.c: 123: static const struct configuration_1_packet configuration_1 =
+[v _configuration_1 `CS25 ~T0 @X0 1 s ]
+[i _configuration_1
+:U ..
+:U ..
+:U ..
+:U ..
+-> -> # `S10 `ui `uc
+-> . `E333 1 `uc
+-> -> # _configuration_1 `ui `us
+-> -> 1 `i `uc
+-> -> 1 `i `uc
+-> -> 0 `i `uc
+-> -> 128 `i `uc
+-> / -> 100 `i -> 2 `i `uc
+..
+..
+:U ..
+:U ..
+-> -> # `S19 `ui `uc
+-> . `E333 3 `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 2 `i `uc
+-> -> 3 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+-> -> 0 `i `uc
+..
+..
+:U ..
+:U ..
+-> -> # `S23 `ui `uc
+-> . `E422 0 `uc
+-> -> 257 `i `us
+-> -> 0 `i `uc
+-> -> 1 `i `uc
+-> . `E422 1 `uc
+-> -> # _custom_report_descriptor `ui `us
+..
+..
+:U ..
+:U ..
+-> -> # `S20 `ui `uc
+-> . `E333 4 `uc
+-> | -> 1 `i -> 128 `i `uc
+-> . `E350 3 `uc
+-> -> 64 `i `us
+-> -> 1 `i `uc
+..
+..
+:U ..
+:U ..
+-> -> # `S20 `ui `uc
+-> . `E333 4 `uc
+-> -> 1 `i `uc
+-> . `E350 3 `uc
+-> -> 64 `i `us
+-> -> 1 `i `uc
+..
+..
+..
+..
+]
+"194
+[; ;../usb_descriptors.c: 194: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t lang; } str00 = {
+[v _str00 `CS26 ~T0 @X0 1 s ]
+[i _str00
+:U ..
+:U ..
+-> -> # _str00 `ui `uc
+-> . `E333 2 `uc
+-> -> 1033 `i `us
+..
+..
+]
+"200
+[; ;../usb_descriptors.c: 200: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } vendor_string = {
+[v _vendor_string `CS27 ~T0 @X0 1 s ]
+[i _vendor_string
+:U ..
+:U ..
+-> -> # _vendor_string `ui `uc
+-> . `E333 2 `uc
+:U ..
+-> -> 116 `ui `us
+-> -> 111 `ui `us
+-> -> 111 `ui `us
+-> -> 108 `ui `us
+-> -> 98 `ui `us
+-> -> 105 `ui `us
+-> -> 116 `ui `us
+-> -> 46 `ui `us
+-> -> 111 `ui `us
+-> -> 114 `ui `us
+-> -> 103 `ui `us
+..
+..
+..
+]
+"206
+[; ;../usb_descriptors.c: 206: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } product_string = {
+[v _product_string `CS28 ~T0 @X0 1 s ]
+[i _product_string
+:U ..
+:U ..
+-> -> # _product_string `ui `uc
+-> . `E333 2 `uc
+:U ..
+-> -> 76 `ui `us
+-> -> 117 `ui `us
+-> -> 107 `ui `us
+-> -> 101 `ui `us
+..
+..
+..
+]
+"212
+[; ;../usb_descriptors.c: 212: static const struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } interface_string = {
+[v _interface_string `CS29 ~T0 @X0 1 s ]
+[i _interface_string
+:U ..
+:U ..
+-> -> # _interface_string `ui `uc
+-> . `E333 2 `uc
+:U ..
+-> -> 73 `ui `us
+-> -> 110 `ui `us
+-> -> 116 `ui `us
+-> -> 101 `ui `us
+-> -> 114 `ui `us
+-> -> 102 `ui `us
+-> -> 97 `ui `us
+-> -> 99 `ui `us
+-> -> 101 `ui `us
+-> -> 32 `ui `us
+-> -> 49 `ui `us
+..
+..
+..
+]
+"228
+[; ;../usb_descriptors.c: 228: int16_t usb_application_get_string(uint8_t string_number, const void **ptr)
+[v _usb_application_get_string `(s ~T0 @X0 1 ef2`uc`**Cv ]
+"229
+[; ;../usb_descriptors.c: 229: {
+{
+[e :U _usb_application_get_string ]
+"228
+[; ;../usb_descriptors.c: 228: int16_t usb_application_get_string(uint8_t string_number, const void **ptr)
+[v _string_number `uc ~T0 @X0 1 r1 ]
+[v _ptr `**Cv ~T0 @X0 1 r2 ]
+"229
+[; ;../usb_descriptors.c: 229: {
+[f ]
+"230
+[; ;../usb_descriptors.c: 230:  if (string_number == 0) {
+[e $ ! == -> _string_number `i -> 0 `i 31  ]
+{
+"231
+[; ;../usb_descriptors.c: 231:   *ptr = &str00;
+[e = *U _ptr -> &U _str00 `*Cv ]
+"232
+[; ;../usb_descriptors.c: 232:   return sizeof(str00);
+[e ) -> -> # _str00 `ui `s ]
+[e $UE 30  ]
+"233
+[; ;../usb_descriptors.c: 233:  }
+}
+[e $U 32  ]
+"234
+[; ;../usb_descriptors.c: 234:  else if (string_number == 1) {
+[e :U 31 ]
+[e $ ! == -> _string_number `i -> 1 `i 33  ]
+{
+"235
+[; ;../usb_descriptors.c: 235:   *ptr = &vendor_string;
+[e = *U _ptr -> &U _vendor_string `*Cv ]
+"236
+[; ;../usb_descriptors.c: 236:   return sizeof(vendor_string);
+[e ) -> -> # _vendor_string `ui `s ]
+[e $UE 30  ]
+"237
+[; ;../usb_descriptors.c: 237:  }
+}
+[e $U 34  ]
+"238
+[; ;../usb_descriptors.c: 238:  else if (string_number == 2) {
+[e :U 33 ]
+[e $ ! == -> _string_number `i -> 2 `i 35  ]
+{
+"239
+[; ;../usb_descriptors.c: 239:   *ptr = &product_string;
+[e = *U _ptr -> &U _product_string `*Cv ]
+"240
+[; ;../usb_descriptors.c: 240:   return sizeof(product_string);
+[e ) -> -> # _product_string `ui `s ]
+[e $UE 30  ]
+"241
+[; ;../usb_descriptors.c: 241:  }
+}
+[e $U 36  ]
+"242
+[; ;../usb_descriptors.c: 242:  else if (string_number == 3) {
+[e :U 35 ]
+[e $ ! == -> _string_number `i -> 3 `i 37  ]
+{
+"245
+[; ;../usb_descriptors.c: 245:   return -1;
+[e ) -> -U -> 1 `i `s ]
+[e $UE 30  ]
+"246
+[; ;../usb_descriptors.c: 246:  }
+}
+[e :U 37 ]
+[e :U 36 ]
+[e :U 34 ]
+[e :U 32 ]
+"248
+[; ;../usb_descriptors.c: 248:  return -1;
+[e ) -> -U -> 1 `i `s ]
+[e $UE 30  ]
+"249
+[; ;../usb_descriptors.c: 249: }
+[e :UE 30 ]
+}
+"262
+[; ;../usb_descriptors.c: 262: const struct configuration_descriptor *usb_application_config_descs[] =
+[v _usb_application_config_descs `*CS10 ~T0 @X0 -> -> 1 `i `ux e ]
+[i _usb_application_config_descs
+:U ..
+-> -> &U _configuration_1 `*S10 `*CS10
+..
+]
+"270
+[; ;../usb_descriptors.c: 270: int16_t usb_application_get_hid_descriptor(uint8_t interface, const void **ptr)
+[v _usb_application_get_hid_descriptor `(s ~T0 @X0 1 ef2`uc`**Cv ]
+"271
+[; ;../usb_descriptors.c: 271: {
+{
+[e :U _usb_application_get_hid_descriptor ]
+"270
+[; ;../usb_descriptors.c: 270: int16_t usb_application_get_hid_descriptor(uint8_t interface, const void **ptr)
+[v _interface `uc ~T0 @X0 1 r1 ]
+[v _ptr `**Cv ~T0 @X0 1 r2 ]
+"271
+[; ;../usb_descriptors.c: 271: {
+[f ]
+"274
+[; ;../usb_descriptors.c: 274:  const void *p = &configuration_1.hid;
+[v _p `*Cv ~T0 @X0 1 a ]
+[e = _p -> &U . _configuration_1 2 `*Cv ]
+"275
+[; ;../usb_descriptors.c: 275:  *ptr = p;
+[e = *U _ptr _p ]
+"276
+[; ;../usb_descriptors.c: 276:  return sizeof(configuration_1.hid);
+[e ) -> -> # . _configuration_1 2 `ui `s ]
+[e $UE 38  ]
+"277
+[; ;../usb_descriptors.c: 277: }
+[e :UE 38 ]
+}
+"280
+[; ;../usb_descriptors.c: 280: int16_t usb_application_get_hid_report_descriptor(uint8_t interface, const void **ptr)
+[v _usb_application_get_hid_report_descriptor `(s ~T0 @X0 1 ef2`uc`**Cv ]
+"281
+[; ;../usb_descriptors.c: 281: {
+{
+[e :U _usb_application_get_hid_report_descriptor ]
+"280
+[; ;../usb_descriptors.c: 280: int16_t usb_application_get_hid_report_descriptor(uint8_t interface, const void **ptr)
+[v _interface `uc ~T0 @X0 1 r1 ]
+[v _ptr `**Cv ~T0 @X0 1 r2 ]
+"281
+[; ;../usb_descriptors.c: 281: {
+[f ]
+"282
+[; ;../usb_descriptors.c: 282:  *ptr = custom_report_descriptor;
+[e = *U _ptr -> &U _custom_report_descriptor `*Cv ]
+"283
+[; ;../usb_descriptors.c: 283:  return sizeof(custom_report_descriptor);
+[e ) -> -> # _custom_report_descriptor `ui `s ]
+[e $UE 39  ]
+"284
+[; ;../usb_descriptors.c: 284: }
+[e :UE 39 ]
+}

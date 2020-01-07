@@ -34,8 +34,8 @@
       <itemPath>../../common/hardware.h</itemPath>
       <itemPath>../attribute.h</itemPath>
       <itemPath>../main.c</itemPath>
-      <itemPath>../luke_func.c</itemPath>
-      <itemPath>../luke_func.h</itemPath>
+      <itemPath>../dmm_func.c</itemPath>
+      <itemPath>../dmm_func.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -1218,7 +1218,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>SKDEPIC18FJPlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.38</languageToolchainVersion>
+        <languageToolchainVersion>2.10</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <compileType>
@@ -1334,7 +1334,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.38</languageToolchainVersion>
+        <languageToolchainVersion>2.10</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <compileType>
@@ -1505,7 +1505,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.38</languageToolchainVersion>
+        <languageToolchainVersion>2.10</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <compileType>

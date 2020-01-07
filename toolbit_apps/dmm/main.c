@@ -1,5 +1,5 @@
 /*
- * Luke
+ * Toolbit DMM
  * 
  * This program is based on M-Stack and USB HID Mouse released by
  * Signal 11 Software
@@ -35,7 +35,7 @@
 #include "hardware.h"
 #include "i2c-lib.h"
 #include "attribute.h"
-#include "luke_func.h"
+#include "dmm_func.h"
 #include "memory/memory.h"
 
 #ifdef MULTI_CLASS_DEVICE
@@ -46,7 +46,7 @@ static uint8_t hid_interfaces[] = {0};
 int main(void) {
     hardware_init();
 
-    luke_init();
+    dmm_init();
     
 #ifdef MULTI_CLASS_DEVICE
     hid_set_interface_list(hid_interfaces, sizeof (hid_interfaces));

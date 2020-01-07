@@ -1,4 +1,4 @@
-#include "luke_func.h"
+#include "dmm_func.h"
 #include "hardware.h"
 #include "i2c-lib.h"
 #include "attribute.h"
@@ -66,7 +66,7 @@ float lowVoltageOffset;
 float highVoltageSlope;
 float highVoltageOffset;
 
-void luke_init() {
+void dmm_init() {
     LATC = 0x0;
     ANSELC = 0x00;  // All pins are set as digital I/O
     PORTC = 0x00;
