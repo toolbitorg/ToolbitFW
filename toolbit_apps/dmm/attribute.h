@@ -62,7 +62,7 @@ struct Attribution{
 };
  */
 
-static const ROMPTR char PRODUCT_NAME[]     = "Luke";
+static const ROMPTR char PRODUCT_NAME[]     = "Dmm";
 static const ROMPTR char FIRM_VERSION[]     = "0.1";
 // If PC2 input is low/high, PRODUCT_REVISION = 0/1
 // PRODUCT_SERIAL is stored in HEF memory

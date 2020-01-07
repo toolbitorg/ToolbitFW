@@ -84,7 +84,7 @@ const ROMPTR struct device_descriptor this_device_descriptor =
 	//0x003F, // Product
 /* The following product code is provided by Microchip to Toolbit
  * based on sublicense of USB VID/PID */
-  0xEC0,  // Product
+	0xECD0,  // Product
 	0x0003, // device release (1.0)
 	1, // Manufacturer
 	2, // Product
@@ -206,7 +206,7 @@ static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t ch
 static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } product_string = {
 	sizeof(product_string),
 	DESC_STRING,
-	{'L','u','k','e'}
+	{'T','o','o','l','b','i','t','D','M','M'}
 };
 
 static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } interface_string = {
