@@ -6,3 +6,5 @@ chopper_hub.X/build/
 chopper_hub.X/dist
 chopper_hub.X/funclist
 chopper_hub.X/disassembly/
+firmware.dfu
+firmware.hex

@@ -95,7 +95,7 @@
     </conf>
     <conf name="PIC18_Starter_Kit_PIC18F46J50" type="2">
       <platformToolSN></platformToolSN>
-      <languageToolchainDir>C:\Program Files (x86)\Microchip\xc8\v1.38\bin</languageToolchainDir>
+      <languageToolchainDir>C:\Program Files (x86)\Microchip\xc8\v2.10\bin</languageToolchainDir>
       <mdbdebugger version="1">
         <placeholder1>place holder 1</placeholder1>
         <placeholder2>place holder 2</placeholder2>
@@ -113,7 +113,7 @@
     </conf>
     <conf name="PIC16F1454" type="2">
       <platformToolSN></platformToolSN>
-      <languageToolchainDir>C:\Program Files (x86)\Microchip\xc8\v1.38\bin</languageToolchainDir>
+      <languageToolchainDir>C:\Program Files (x86)\Microchip\xc8\v2.10\bin</languageToolchainDir>
       <mdbdebugger version="1">
         <placeholder1>place holder 1</placeholder1>
         <placeholder2>place holder 2</placeholder2>
@@ -131,7 +131,7 @@
     </conf>
     <conf name="PIC16F1459" type="2">
       <platformToolSN></platformToolSN>
-      <languageToolchainDir>C:\Program Files (x86)\Microchip\xc8\v1.38\bin</languageToolchainDir>
+      <languageToolchainDir>C:\Program Files (x86)\Microchip\xc8\v2.10\bin</languageToolchainDir>
       <mdbdebugger version="1">
         <placeholder1>place holder 1</placeholder1>
         <placeholder2>place holder 2</placeholder2>
