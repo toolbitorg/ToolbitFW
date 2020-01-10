@@ -48,7 +48,7 @@ void chopper_init()
     LATC = 0x00;
     ANSELC = 0x00;
     PORTC = 0x00;
-    TRISC = 0xFC;  // RC0, RC1 are output pins for now
+    TRISC = 0xC8;  // RC0, RC1, RC2, RC4, RC5 are output pins for now
     
     // interrupt setting for over current protection
     LATA = 0x00;
@@ -201,7 +201,7 @@ int main(void) {
 
                         if (id == ATT_USB_PORT_CTRL) {
 
-                            uint8_t out = 0x00;
+                            uint8_t out = PORTC & 0xFC;
                             portCtrl[0] = RxDataBuffer[4];
                             if (!(portCtrl[0] & 0x01)) // Check port 2
                                 out = out | 0x2; 
