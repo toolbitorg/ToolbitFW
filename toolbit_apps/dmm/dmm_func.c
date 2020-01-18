@@ -34,8 +34,8 @@
 #define INA3221_MANUFACTURER_ID 0xFE
 #define INA3221_DIE_ID 0xFF
 
-#define CURRENT_RANGE_THRESHOULD  0x05D8
-#define CURRENT_RANGE_THRESHOULD0 0x05
+#define CURRENT_RANGE_THRESHOULD  187    // Threshould 150mA / 0.80mA/bit = 187.5   
+#define CURRENT_RANGE_THRESHOULD0 0x05   // 187 = 0xBB; 0xBB << 3 = 0x05D8
 #define CURRENT_RANGE_THRESHOULD1 0xD8
 #define VOLTAGE_RANGE_THRESHOULD  4080
 
@@ -48,9 +48,9 @@
 #define NVM_HIGH_VOLTAGE_SLOPE_ADDR  0x1F92
 #define NVM_HIGH_VOLTAGE_OFFSET_ADDR 0x1F95
 
-static const ROMPTR float NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR    = 0.000040;  // 40.0uA/bit
+static const ROMPTR float NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR    = 0.000040;    // 40.0uA/bit
 static const ROMPTR float NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR   = -0.0; 
-static const ROMPTR float NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR   = 0.00080 * 5.0 / 4.0;  // 0.80mA/bit
+static const ROMPTR float NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR   = 0.00080;     // 0.80mA/bit
 static const ROMPTR float NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR  = 0.0;
 static const ROMPTR float NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR    = -0.0015214;  // 1.5214 mV/bit
 static const ROMPTR float NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR   = 0.0;
@@ -70,7 +70,7 @@ void dmm_init() {
     LATC = 0x0;
     ANSELC = 0x00;  // All pins are set as digital I/O
     PORTC = 0x00;
-    TRISC = 0x07;  // RC0, RC1, RC2: input, other pins: output
+    TRISC = 0x03;  // RC0, RC1: input, other pins: output
 
     WPUA = 0x38;   // Enable weak pull-up of RA3, RA4, RA5
     OPTION_REGbits.nWPUEN = 0;

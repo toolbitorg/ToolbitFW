@@ -40,14 +40,14 @@ typedef enum
 	ATT_PRODUCT_SERIAL   = 0x0002,
 	ATT_FIRM_VERSION     = 0x0003,
 
-    // Platform commom attribute ID
-    ATT_I2C0_DEVICE_ADDR = 0x1400,
-    ATT_I2C0_REG_ADDR    = 0x1401,
-    ATT_I2C0_RW_1BYTE    = 0x1402,
-    ATT_I2C0_RW_2BYTE    = 0x1403,
-            
-    // Product specific attribute ID
-    ATT_VOLTAGE_RANGE    = 0x8100,
+  // Platform commom attribute ID
+  ATT_I2C0_DEVICE_ADDR = 0x1400,
+  ATT_I2C0_REG_ADDR    = 0x1401,
+  ATT_I2C0_RW_1BYTE    = 0x1402,
+  ATT_I2C0_RW_2BYTE    = 0x1403,
+
+  // Product specific attribute ID
+  ATT_VOLTAGE_RANGE    = 0x8100,
 	ATT_VOLTAGE          = 0x8101,
 	ATT_CURRENT_RANGE    = 0x8102,
 	ATT_CURRENT          = 0x8103
@@ -73,4 +73,3 @@ static const ROMPTR uint32_t NVM_PRODUCT_SERIAL1 @ NVM_PRODUCT_SERIAL_ADDR+4 = 0
 
 
 #endif	/* ATTRIBUTE_H__ */
-
