@@ -16,10 +16,6 @@
         <itemPath>../../lib/i2c-lib.c</itemPath>
         <itemPath>../../lib/i2c-lib.h</itemPath>
       </logicalFolder>
-      <logicalFolder name="f3" displayName="memory" projectFiles="true">
-        <itemPath>../memory/memory.c</itemPath>
-        <itemPath>../memory/memory.h</itemPath>
-      </logicalFolder>
       <logicalFolder name="f1" displayName="USB" projectFiles="true">
         <itemPath>../../../usb/src/usb.c</itemPath>
         <itemPath>../../../usb/include/usb.h</itemPath>

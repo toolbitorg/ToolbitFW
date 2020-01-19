@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include "i2c-lib.h"
 
+#define I2C_INA_ADDR  0x40
+
 void dmm_init();
 void i2c_reg_write(uint8_t regAddr, uint8_t dat0, uint8_t dat1);
 uint16_t i2c_reg_read(uint8_t regAddr);

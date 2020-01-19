@@ -36,7 +36,6 @@
 #include "i2c-lib.h"
 #include "attribute.h"
 #include "dmm_func.h"
-#include "memory/memory.h"
 
 #ifdef MULTI_CLASS_DEVICE
 static uint8_t hid_interfaces[] = {0};
@@ -57,7 +56,7 @@ int main(void) {
     
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
-            //                uint8_t len;
+            
             const unsigned char *RxDataBuffer;
             unsigned char *TxDataBuffer = usb_get_in_buffer(1);
             /* Data received from host */
@@ -99,11 +98,6 @@ int main(void) {
                                     break;
                             
                                 case ATT_PRODUCT_SERIAL:
-                                /*  TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
-                                    for (uint8_t i=0; i<NVM_PRODUCT_SERIAL_SIZE; i++) {
-                                    // Please note that 1 word of HEF is 14bits but lower 8bits is high-endurance
-                                    TxDataBuffer[i+3] = (uint8_t) FLASH_ReadWord(NVM_PRODUCT_SERIAL_ADDR + i);
-                                } */
                                     TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
                                     memcpy(&TxDataBuffer[3], NVM_PRODUCT_SERIAL_ADDR, NVM_PRODUCT_SERIAL_SIZE);
                                     break;
@@ -112,6 +106,11 @@ int main(void) {
                                     len = strlen(FIRM_VERSION) + 1; // +1 for NULL
                                     TxDataBuffer[0] |= len + 3; // packet length
                                     memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
+                                    break;
+
+                                case ATT_I2C0_DEVICE_ADDR:
+                                    TxDataBuffer[0]  |= 1 + 3; // packet length
+                                    TxDataBuffer[3] = I2C_INA_ADDR;  // I2C device address is fixed
                                     break;
                                     
                                 case ATT_I2C0_RW_2BYTE:
@@ -148,6 +147,11 @@ int main(void) {
                             TxDataBuffer[2] = RC_OK; // Return OK code
                             
                             switch (id) {
+
+                                case ATT_I2C0_DEVICE_ADDR:
+                                    // Nothing to do because I2C device address is fixed
+                                    break;
+
                                 case ATT_I2C0_REG_ADDR:
                                     regAddr = RxDataBuffer[4];
                                     break;

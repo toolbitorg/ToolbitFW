@@ -9,11 +9,11 @@
 #define ROMPTR
 #endif
 
-#define I2C_INA_ADDR  0x40
+#define I2C_INA_ADDR  0x40    // This is also defined in dmm_func.h
 #define I2C_WRITE_CMD 0
 #define I2C_READ_CMD  1
 
-#define INA3221_CONFG     0x00
+#define INA3221_CONFG    0x00
 #define INA3221_SHUNTV_1 0x01
 #define INA3221_BUSV_1   0x02
 #define INA3221_SHUNTV_2 0x03
