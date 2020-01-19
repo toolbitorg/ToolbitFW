@@ -1,6 +1,6 @@
 /*
  * Toolbit DMM
- * 
+ *
  * This program is based on M-Stack and USB HID Mouse released by
  * Signal 11 Software
  */
@@ -46,17 +46,17 @@ int main(void) {
     hardware_init();
 
     dmm_init();
-    
+
 #ifdef MULTI_CLASS_DEVICE
     hid_set_interface_list(hid_interfaces, sizeof (hid_interfaces));
 #endif
     usb_init();
 
     uint8_t  regAddr = 0;
-    
+
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
-            
+
             const unsigned char *RxDataBuffer;
             unsigned char *TxDataBuffer = usb_get_in_buffer(1);
             /* Data received from host */
@@ -76,32 +76,38 @@ int main(void) {
 
                     uint8_t opcode = RxDataBuffer[1];
                     TxDataBuffer[1] = opcode; // echo back operation code
-                    ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];                        
+                    ATTID id = (RxDataBuffer[2] << 8) + RxDataBuffer[3];
                     uint8_t len;
-                    
+
                     switch (opcode) {
                         case OP_ATT_VALUE_GET:
                             TxDataBuffer[2] = RC_OK; // Return OK code
                             TxDataBuffer[0] = PROTOCOL_VERSION;
 
                             switch (id) {
+                                case ATT_VENDOR_NAME:
+                                    len = strlen(VENDOR_NAME) + 1; // +1 for NULL
+                                    TxDataBuffer[0] |= len + 3; // packet length
+                                    memcpy(&TxDataBuffer[3], VENDOR_NAME, len);
+                                    break;
+
                                 case ATT_PRODUCT_NAME:
                                     len = strlen(PRODUCT_NAME) + 1; // +1 for NULL
                                     TxDataBuffer[0] |= len + 3; // packet length
                                     memcpy(&TxDataBuffer[3], PRODUCT_NAME, len);
                                     break;
-                                    
+
                                 case ATT_PRODUCT_REVISION:
                                     TxDataBuffer[0] |= 2 + 3; // packet length
-                                    TxDataBuffer[3] = '0' + PORTCbits.RC2;
+                                    TxDataBuffer[3] = '1' - PORTAbits.RA5;
                                     TxDataBuffer[4] = NULL;
                                     break;
-                            
+
                                 case ATT_PRODUCT_SERIAL:
                                     TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
                                     memcpy(&TxDataBuffer[3], NVM_PRODUCT_SERIAL_ADDR, NVM_PRODUCT_SERIAL_SIZE);
                                     break;
-                                
+
                                 case ATT_FIRM_VERSION:
                                     len = strlen(FIRM_VERSION) + 1; // +1 for NULL
                                     TxDataBuffer[0] |= len + 3; // packet length
@@ -112,21 +118,21 @@ int main(void) {
                                     TxDataBuffer[0]  |= 1 + 3; // packet length
                                     TxDataBuffer[3] = I2C_INA_ADDR;  // I2C device address is fixed
                                     break;
-                                    
+
                                 case ATT_I2C0_RW_2BYTE:
                                     TxDataBuffer[0]  |= 2 + 3; // packet length
                                     uint16_t dat = i2c_reg_read(regAddr);
-                                    TxDataBuffer[4] = dat >> 8; 
+                                    TxDataBuffer[4] = dat >> 8;
                                     TxDataBuffer[3] = dat;
                                     break;
-                                    
+
                                 case ATT_VOLTAGE:
                                     TxDataBuffer[0] |= 4 + 3; // packet length
                                     float volt = get_voltage();
                                     TxDataBuffer[3] = 0x00;
                                     memcpy(&TxDataBuffer[4], &volt, 3);
                                     break;
-                                
+
                                 case ATT_CURRENT:
                                     TxDataBuffer[0] |= 4 + 3; // packet length
                                     float curr = get_current();
@@ -138,14 +144,14 @@ int main(void) {
                                     TxDataBuffer[0] |= 3; // packet length
                                     TxDataBuffer[2] = RC_FAIL; // Return error code
                                     break;
-                                    
+
                             } // end of switch (id)
                             break;
-                            
+
                         case  OP_ATT_VALUE_SET:
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                             TxDataBuffer[2] = RC_OK; // Return OK code
-                            
+
                             switch (id) {
 
                                 case ATT_I2C0_DEVICE_ADDR:
@@ -155,25 +161,25 @@ int main(void) {
                                 case ATT_I2C0_REG_ADDR:
                                     regAddr = RxDataBuffer[4];
                                     break;
-                                    
+
                                 case ATT_I2C0_RW_2BYTE:
                                     i2c_reg_write(regAddr, RxDataBuffer[5], RxDataBuffer[4]);
                                     break;
-                                
+
                                 default:
                                     TxDataBuffer[2] = RC_FAIL; // Return error code
                                     break;
-                                    
+
                             } // end of switch (id)
                             break;
-                            
+
                         default:
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
                             break;
-                                                        
+
                     } // switch (opcode)
-                          
+
                     // Send response
                     memcpy(usb_get_in_buffer(1), TxDataBuffer, EP_1_IN_LEN);
                     usb_send_in_buffer(1, EP_1_IN_LEN);

@@ -73,6 +73,7 @@ void dmm_init() {
     TRISC = 0x03;  // RC0, RC1: input, other pins: output
 
     WPUA = 0x38;   // Enable weak pull-up of RA3, RA4, RA5
+    TRISA = 0x30;  // RA4, RA5: input
     OPTION_REGbits.nWPUEN = 0;
 
     // Load parameters from HEF memory

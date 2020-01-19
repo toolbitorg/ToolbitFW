@@ -88,7 +88,7 @@ const ROMPTR struct device_descriptor this_device_descriptor =
 	0x0003, // device release (1.0)
 	1, // Manufacturer
 	2, // Product
-	0, // Serial
+	3, // Serial
 	NUMBER_OF_CONFIGURATIONS // NumConfigurations
 };
 
@@ -206,7 +206,7 @@ static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t ch
 static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } product_string = {
 	sizeof(product_string),
 	DESC_STRING,
-	{'T','o','o','l','b','i','t',' ','D','M','M'}
+	{'D','M','M',' ',' ',' ',' ',' ',' ',' ',' '}    // Need to delete space and change size
 };
 
 static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } interface_string = {
@@ -242,7 +242,10 @@ int16_t usb_application_get_string(uint8_t string_number, const void **ptr)
 	else if (string_number == 3) {
 		/* This is where you might have code to do something like read
 		   a serial number out of EEPROM and return it. */
-		return -1;
+		/* a direct pointer to the serial number provided by
+		 'USB 512-Word DFU Bootloader for PIC16(L)F1454/5/9' */
+        *ptr = (void *)0x81EE;
+        return 18; /* one byte length + one byte for string type + 8x two bytes for eight character UNICODE string */
 	}
 
 	return -1;
