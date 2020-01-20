@@ -2,6 +2,8 @@
 #include "hardware.h"
 #include "i2c-lib.h"
 #include "attribute.h"
+#include "HEFlash.h"
+
 
 #ifdef __C18
 #define ROMPTR rom
@@ -39,32 +41,51 @@
 #define CURRENT_RANGE_THRESHOULD1 0x40
 #define VOLTAGE_RANGE_THRESHOULD  4080
 
+// High-Endurance Flash memory map
+// Block0 0x1F80-0x1F9F : Slope parameters
+// Block1 0x1FA0-0x1FBF : CAL_DONE flag and offset data
+// Block2 0x1FC0-0x1FDF : N/A
+// Block3 0x1FE0-0x1FF8 : N/A
+
+// Block0
+// There are slope parameters that will NOT be updated by calibration
 #define NVM_LOW_CURRENT_SLOPE_ADDR   0x1F80
-#define NVM_LOW_CURRENT_OFFSET_ADDR  0x1F83
-#define NVM_HIGH_CURRENT_SLOPE_ADDR  0x1F86
-#define NVM_HIGH_CURRENT_OFFSET_ADDR 0x1F89
-#define NVM_LOW_VOLTAGE_SLOPE_ADDR   0x1F8C
-#define NVM_LOW_VOLTAGE_OFFSET_ADDR  0x1F8F
-#define NVM_HIGH_VOLTAGE_SLOPE_ADDR  0x1F92
-#define NVM_HIGH_VOLTAGE_OFFSET_ADDR 0x1F95
+#define NVM_HIGH_CURRENT_SLOPE_ADDR  0x1F83
+#define NVM_LOW_VOLTAGE_SLOPE_ADDR   0x1F86
+#define NVM_HIGH_VOLTAGE_SLOPE_ADDR  0x1F89
 
-static const ROMPTR float NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR    = 0.000040;    // 40.0uA/bit
-static const ROMPTR float NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR   = -0.0; 
-static const ROMPTR float NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR   = 0.00080;     // 0.80mA/bit
-static const ROMPTR float NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR  = 0.0;
-static const ROMPTR float NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR    = -0.0015214;  // 1.5214 mV/bit
-static const ROMPTR float NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR   = 0.0;
-static const ROMPTR float NVM_HIGH_VOLTAGE_SLOPE  @ NVM_HIGH_VOLTAGE_SLOPE_ADDR   = 0.304296;    // 304.296 mV/bit
-static const ROMPTR float NVM_HIGH_VOLTAGE_OFFSET @ NVM_HIGH_VOLTAGE_OFFSET_ADDR  = -62.76111;   // ideal offset
+// Block1
+// There are calibration done flag and offset data
+#define NVM_CAL_DONE_ADDR            0x1FA0
+#define NVM_LOW_CURRENT_OFFSET_ADDR  0x1FA1
+#define NVM_HIGH_CURRENT_OFFSET_ADDR 0x1FA2
+#define NVM_LOW_VOLTAGE_OFFSET_ADDR  0x1FA3
+#define NVM_HIGH_VOLTAGE_OFFSET_ADDR 0x1FA4  // This uses 2 bytes
 
-float lowCurrentSlope;
-float lowCurrentOffset;
-float highCurrentSlope;
-float highCurrentOffset;
-float lowVoltageSlope;
-float lowVoltageOffset;
-float highVoltageSlope;
-float highVoltageOffset;
+#define CAL_DONE      0x00
+#define CAL_NOT_DONE  0xFF   // 0xFF means calibration is not executed yet
+static const ROMPTR uint8_t NVM_CAL_DONE @ NVM_CAL_DONE_ADDR = CAL_NOT_DONE; 
+
+static const ROMPTR float  NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR  = 0.000040;    // 40.0uA/bit
+static const ROMPTR int8_t NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR; 
+static const ROMPTR float  NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR = 0.00080;     // 0.80mA/bit
+static const ROMPTR int8_t NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR;
+static const ROMPTR float  NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR  = -0.0015214;  // 1.5214 mV/bit
+static const ROMPTR int8_t NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR;
+static const ROMPTR float  NVM_HIGH_VOLTAGE_SLOPE  @ NVM_HIGH_VOLTAGE_SLOPE_ADDR = 0.304296;    // 304.296 mV/bit
+static const ROMPTR int16_t NVM_HIGH_VOLTAGE_OFFSET @ NVM_HIGH_VOLTAGE_OFFSET_ADDR;
+
+float  lowCurrentSlope;
+int8_t lowCurrentOffset;
+float  highCurrentSlope;
+int8_t highCurrentOffset;
+float  lowVoltageSlope;
+int8_t lowVoltageOffset;
+float  highVoltageSlope;
+int16_t highVoltageOffset;
+
+#define LED1_ON()       PORTCbits.RC2 = 1
+#define LED1_OFF()      PORTCbits.RC2 = 0
 
 void dmm_init() {
     LATC = 0x0;
@@ -76,18 +97,23 @@ void dmm_init() {
     TRISA = 0x30;  // RA4, RA5: input
     OPTION_REGbits.nWPUEN = 0;
 
-    // Load parameters from HEF memory
-    lowCurrentSlope   = NVM_LOW_CURRENT_SLOPE;
-    lowCurrentOffset  = NVM_LOW_CURRENT_OFFSET;
-    highCurrentSlope  = NVM_HIGH_CURRENT_SLOPE;
-    highCurrentOffset = NVM_HIGH_CURRENT_OFFSET;
-    lowVoltageSlope   = NVM_LOW_VOLTAGE_SLOPE;
-    lowVoltageOffset  = NVM_LOW_VOLTAGE_OFFSET;
-    highVoltageSlope  = NVM_HIGH_VOLTAGE_SLOPE;
-    highVoltageOffset = NVM_HIGH_VOLTAGE_OFFSET;
-    
     i2c_enable();
     set_autorange_threshould();
+
+    if(NVM_CAL_DONE==CAL_NOT_DONE) {
+        cal_offset();
+        LED1_ON();
+    }
+    
+    // Load parameters from HEF memory
+    lowCurrentSlope   = NVM_LOW_CURRENT_SLOPE;
+    highCurrentSlope  = NVM_HIGH_CURRENT_SLOPE;
+    lowVoltageSlope   = NVM_LOW_VOLTAGE_SLOPE;
+    highVoltageSlope  = NVM_HIGH_VOLTAGE_SLOPE;    
+    lowCurrentOffset  = NVM_LOW_CURRENT_OFFSET;
+    highCurrentOffset = NVM_HIGH_CURRENT_OFFSET;
+    lowVoltageOffset  = NVM_LOW_VOLTAGE_OFFSET;
+    highVoltageOffset = NVM_HIGH_VOLTAGE_OFFSET;
 }
 
 void i2c_reg_write(uint8_t regAddr, uint8_t dat0, uint8_t dat1)
@@ -136,9 +162,9 @@ float get_voltage()
     int16_t val = get_shunt_voltage(INA3221_SHUNTV_3);
 
     if(val<VOLTAGE_RANGE_THRESHOULD && val>-VOLTAGE_RANGE_THRESHOULD)
-        return val * lowVoltageSlope + lowVoltageOffset;
+        return (val + lowVoltageOffset) * lowVoltageSlope;
     else
-        return get_shunt_voltage(INA3221_BUSV_3) * highVoltageSlope + highVoltageOffset;
+        return (get_shunt_voltage(INA3221_BUSV_3) + highVoltageOffset) * highVoltageSlope;
 }
 
 float get_current()
@@ -146,7 +172,24 @@ float get_current()
     int16_t val = get_shunt_voltage(INA3221_SHUNTV_2);
     
     if(val<CURRENT_RANGE_THRESHOULD && val>-CURRENT_RANGE_THRESHOULD)
-        return get_shunt_voltage(INA3221_SHUNTV_1) * lowCurrentSlope + lowCurrentOffset;
+        return (get_shunt_voltage(INA3221_SHUNTV_1) + lowCurrentOffset) * lowCurrentSlope;
     else
-        return val * highCurrentSlope + highCurrentOffset;
+        return (val + highCurrentOffset) * highCurrentSlope;
+}
+
+void cal_offset()
+{
+    int8_t buf[FLASH_ROWSIZE];
+    int16_t val;
+         
+    buf[0] =  CAL_DONE;
+    buf[1] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_1);
+    buf[2] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_2);
+    buf[3] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_3);
+    
+    val = -get_shunt_voltage(INA3221_BUSV_3);
+    buf[4] = (int8_t)val;
+    buf[5] = (int8_t)(val >> 8);
+    
+    HEFLASH_writeBlock(1, buf, FLASH_ROWSIZE);
 }

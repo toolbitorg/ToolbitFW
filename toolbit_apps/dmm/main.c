@@ -37,6 +37,7 @@
 #include "attribute.h"
 #include "dmm_func.h"
 
+
 #ifdef MULTI_CLASS_DEVICE
 static uint8_t hid_interfaces[] = {0};
 #endif
@@ -102,7 +103,7 @@ int main(void) {
                                     TxDataBuffer[3] = '1' - PORTAbits.RA5;
                                     TxDataBuffer[4] = NULL;
                                     break;
-
+ 
                                 case ATT_PRODUCT_SERIAL:
                                     TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
                                     memcpy(&TxDataBuffer[3], NVM_PRODUCT_SERIAL_ADDR, NVM_PRODUCT_SERIAL_SIZE);
