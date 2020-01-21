@@ -197,23 +197,18 @@ static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t la
 	0x0409 // US English
 };
 
-static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } vendor_string = {
+static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[7]; } vendor_string = {
 	sizeof(vendor_string),
 	DESC_STRING,
-	{'t','o','o','l','b','i','t','.','o','r','g'}
+	{'T','o','o','l','b','i','t'}
 };
 
-static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } product_string = {
+static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[4]; } product_string = {
 	sizeof(product_string),
 	DESC_STRING,
-	{'D','M','M',' ',' ',' ',' ',' ',' ',' ',' '}    // Need to delete space and change size
+	{'D','M','M',' '}  // It seems like 4 characters are required for some reasons
 };
 
-static const ROMPTR struct {uint8_t bLength;uint8_t bDescriptorType; uint16_t chars[11]; } interface_string = {
-	sizeof(interface_string),
-	DESC_STRING,
-	{'I','n','t','e','r','f','a','c','e',' ','1'}
-};
 
 /* Get String function
  *
