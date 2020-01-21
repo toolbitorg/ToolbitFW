@@ -11,6 +11,8 @@
 #define ROMPTR
 #endif
 
+#define _XTAL_FREQ 16000000
+
 #define I2C_INA_ADDR  0x40    // This is also defined in dmm_func.h
 #define I2C_WRITE_CMD 0
 #define I2C_READ_CMD  1
@@ -36,6 +38,8 @@
 #define INA3221_MANUFACTURER_ID 0xFE
 #define INA3221_DIE_ID 0xFF
 
+#define INA3221_DIE_ID_VAL 0x3220
+
 #define CURRENT_RANGE_THRESHOULD  187    // Low/High threshould 150mA / 0.80mA/bit = 187.5   
 #define CURRENT_RANGE_THRESHOULD0 0x06   // Change burden threshould 160mA = 0xC8; 0xC8 << 3 = 0x0640
 #define CURRENT_RANGE_THRESHOULD1 0x40
@@ -46,34 +50,35 @@
 // Block1 0x1FA0-0x1FBF : CAL_DONE flag and offset data
 // Block2 0x1FC0-0x1FDF : N/A
 // Block3 0x1FE0-0x1FF8 : N/A
-
+//
 // Block0
 // There are slope parameters that will NOT be updated by calibration
 #define NVM_LOW_CURRENT_SLOPE_ADDR   0x1F80
 #define NVM_HIGH_CURRENT_SLOPE_ADDR  0x1F83
 #define NVM_LOW_VOLTAGE_SLOPE_ADDR   0x1F86
 #define NVM_HIGH_VOLTAGE_SLOPE_ADDR  0x1F89
-
+//
 // Block1
 // There are calibration done flag and offset data
 #define NVM_CAL_DONE_ADDR            0x1FA0
 #define NVM_LOW_CURRENT_OFFSET_ADDR  0x1FA1
 #define NVM_HIGH_CURRENT_OFFSET_ADDR 0x1FA2
 #define NVM_LOW_VOLTAGE_OFFSET_ADDR  0x1FA3
-#define NVM_HIGH_VOLTAGE_OFFSET_ADDR 0x1FA4  // This uses 2 bytes
+#define NVM_HIGH_VOLTAGE_OFFSET_ADDR 0x1FA4
 
 #define CAL_DONE      0x00
 #define CAL_NOT_DONE  0xFF   // 0xFF means calibration is not executed yet
 static const ROMPTR uint8_t NVM_CAL_DONE @ NVM_CAL_DONE_ADDR = CAL_NOT_DONE; 
 
-static const ROMPTR float  NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR  = 0.000040;    // 40.0uA/bit
-static const ROMPTR int8_t NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR; 
-static const ROMPTR float  NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR = 0.00080;     // 0.80mA/bit
-static const ROMPTR int8_t NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR;
-static const ROMPTR float  NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR  = -0.0015214;  // 1.5214 mV/bit
-static const ROMPTR int8_t NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR;
-static const ROMPTR float  NVM_HIGH_VOLTAGE_SLOPE  @ NVM_HIGH_VOLTAGE_SLOPE_ADDR = 0.304296;    // 304.296 mV/bit
-static const ROMPTR int16_t NVM_HIGH_VOLTAGE_OFFSET @ NVM_HIGH_VOLTAGE_OFFSET_ADDR;
+static const ROMPTR float  NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR   = 0.000040;    // 40.0uA/bit
+static const ROMPTR int8_t NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR  = 0; 
+static const ROMPTR float  NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR  = 0.00080;     // 0.80mA/bit
+static const ROMPTR int8_t NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR = 0;
+static const ROMPTR float  NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR   = -0.0015214;  // 1.5214 mV/bit
+static const ROMPTR int8_t NVM_LOW_VOLTAGE_OFFSET  @ NVM_LOW_VOLTAGE_OFFSET_ADDR  = 0;
+static const ROMPTR float  NVM_HIGH_VOLTAGE_SLOPE  @ NVM_HIGH_VOLTAGE_SLOPE_ADDR  = 0.304296;    // 304.296 mV/bit
+static const ROMPTR int8_t NVM_HIGH_VOLTAGE_OFFSET @ NVM_HIGH_VOLTAGE_OFFSET_ADDR = 0;
+#define HIGH_VOLTAGE_DEFAULT_OFFSET 206  // VGND 1.65[V] / step size 0.008[V] = 206.25
 
 float  lowCurrentSlope;
 int8_t lowCurrentOffset;
@@ -88,6 +93,8 @@ int16_t highVoltageOffset;
 #define LED1_OFF()      PORTCbits.RC2 = 0
 
 void dmm_init() {
+    uint8_t errcode;
+    
     LATC = 0x0;
     ANSELC = 0x00;  // All pins are set as digital I/O
     PORTC = 0x00;
@@ -98,13 +105,19 @@ void dmm_init() {
     OPTION_REGbits.nWPUEN = 0;
 
     i2c_enable();
-    set_autorange_threshould();
-
-    if(NVM_CAL_DONE==CAL_NOT_DONE) {
-        cal_offset();
-        LED1_ON();
-    }
     
+    if(NVM_CAL_DONE==CAL_NOT_DONE) {
+        // This test runs when booting up the first time to assume that voltage and current inputs are open
+        errcode = selftest();
+        if(errcode>0) {
+            blink_led(errcode);  // Show test result by LED blink                
+        } else {
+            cal_offset();
+        }
+    }
+
+    set_autorange_threshould();
+        
     // Load parameters from HEF memory
     lowCurrentSlope   = NVM_LOW_CURRENT_SLOPE;
     highCurrentSlope  = NVM_HIGH_CURRENT_SLOPE;
@@ -113,7 +126,7 @@ void dmm_init() {
     lowCurrentOffset  = NVM_LOW_CURRENT_OFFSET;
     highCurrentOffset = NVM_HIGH_CURRENT_OFFSET;
     lowVoltageOffset  = NVM_LOW_VOLTAGE_OFFSET;
-    highVoltageOffset = NVM_HIGH_VOLTAGE_OFFSET;
+    highVoltageOffset = NVM_HIGH_VOLTAGE_OFFSET - HIGH_VOLTAGE_DEFAULT_OFFSET;
 }
 
 void i2c_reg_write(uint8_t regAddr, uint8_t dat0, uint8_t dat1)
@@ -153,7 +166,7 @@ int16_t get_shunt_voltage(uint8_t regAddr)
 
 void set_autorange_threshould()
 {
-    // Set the swiching threshould 150mA to assert CRITICAL pin of INA3221
+    // Set the switching threshold to assert CRITICAL pin of INA3221
     i2c_reg_write(INA3221_CRITICAL_LIMIT_2, CURRENT_RANGE_THRESHOULD0, CURRENT_RANGE_THRESHOULD1);
 }
 
@@ -177,19 +190,77 @@ float get_current()
         return (val + highCurrentOffset) * highCurrentSlope;
 }
 
+#define SUCCESS 0
+#define I2C_READ_ERROR   1
+#define HIGH_VOLTAGE_OFFSET_ERROR 2
+#define LOW_VOLTAGE_OFFSET_ERROR  3
+#define HIGH_CURRENT_OFFSET_ERROR 4
+#define LOW_CURRENT_OFFSET_ERROR  5
+
+#define HIGH_VOLTAGE_OFFSET_MAX  HIGH_VOLTAGE_DEFAULT_OFFSET + 3
+#define HIGH_VOLTAGE_OFFSET_MIN  HIGH_VOLTAGE_DEFAULT_OFFSET - 3
+#define LOW_VOLTAGE_OFFSET_MAX   -5
+#define LOW_VOLTAGE_OFFSET_MIN   -35
+#define HIGH_CURRENT_OFFSET_MAX  3
+#define HIGH_CURRENT_OFFSET_MIN  -3
+#define LOW_CURRENT_OFFSET_MAX   3
+#define LOW_CURRENT_OFFSET_MIN   -3
+
+uint8_t selftest()
+{    
+    int16_t val;
+    
+    // Test I2C access to INA3221
+    if(i2c_reg_read(INA3221_DIE_ID) != INA3221_DIE_ID_VAL) {
+        return I2C_READ_ERROR;
+    }
+        
+    if(NVM_CAL_DONE==CAL_NOT_DONE) {
+
+        // Check voltage offset
+        val = get_shunt_voltage(INA3221_BUSV_3);
+        if(val>HIGH_VOLTAGE_OFFSET_MAX || val<HIGH_VOLTAGE_OFFSET_MIN) {
+            return HIGH_VOLTAGE_OFFSET_ERROR;
+        }
+        val = get_shunt_voltage(INA3221_SHUNTV_3);
+        if(val>LOW_VOLTAGE_OFFSET_MAX || val<LOW_VOLTAGE_OFFSET_MIN) {
+            return LOW_VOLTAGE_OFFSET_ERROR;
+        }
+
+        // Check current offset
+        val = get_shunt_voltage(INA3221_SHUNTV_2);
+        if(val>HIGH_CURRENT_OFFSET_MAX || val<HIGH_CURRENT_OFFSET_MIN) {
+            return HIGH_CURRENT_OFFSET_ERROR;
+        }
+        val = get_shunt_voltage(INA3221_SHUNTV_1);
+        if(val>LOW_CURRENT_OFFSET_MAX || val<LOW_CURRENT_OFFSET_MIN) {
+            return LOW_CURRENT_OFFSET_ERROR;
+        }
+    }
+
+    return SUCCESS;
+}
+
 void cal_offset()
 {
     int8_t buf[FLASH_ROWSIZE];
     int16_t val;
          
-    buf[0] =  CAL_DONE;
+    buf[0] = CAL_DONE;
     buf[1] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_1);
     buf[2] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_2);
-    buf[3] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_3);
-    
-    val = -get_shunt_voltage(INA3221_BUSV_3);
-    buf[4] = (int8_t)val;
-    buf[5] = (int8_t)(val >> 8);
+    buf[3] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_3);    
+    buf[4] = (int8_t)-(get_shunt_voltage(INA3221_BUSV_3) - HIGH_VOLTAGE_DEFAULT_OFFSET);
     
     HEFLASH_writeBlock(1, buf, FLASH_ROWSIZE);
+}
+
+void blink_led(uint8_t cnt)
+{
+    while(cnt--) {
+        LED1_ON();
+        __delay_ms(1000); // 1 sec delay
+        LED1_OFF();
+        __delay_ms(1000); // 1 sec delay
+    }         
 }

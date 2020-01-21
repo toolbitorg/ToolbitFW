@@ -12,9 +12,13 @@ void i2c_reg_write(uint8_t regAddr, uint8_t dat0, uint8_t dat1);
 uint16_t i2c_reg_read(uint8_t regAddr);
 int16_t get_shunt_voltage(uint8_t regAddr);
 void set_autorange_threshould();
-void cal_offset();
 
 float get_voltage();
 float get_current();
+
+uint8_t selftest();
+void cal_offset();
+void blink_led(uint8_t cnt);
+
 
 #endif
