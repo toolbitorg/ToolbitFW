@@ -167,6 +167,11 @@ int main(void) {
                                     i2c_reg_write(regAddr, RxDataBuffer[5], RxDataBuffer[4]);
                                     break;
 
+                                case ATT_CALIBRATION:
+                                    cal_offset();
+                                    set_parameters();
+                                    break;
+
                                 default:
                                     TxDataBuffer[2] = RC_FAIL; // Return error code
                                     break;

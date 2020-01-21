@@ -117,16 +117,7 @@ void dmm_init() {
     }
 
     set_autorange_threshould();
-        
-    // Load parameters from HEF memory
-    lowCurrentSlope   = NVM_LOW_CURRENT_SLOPE;
-    highCurrentSlope  = NVM_HIGH_CURRENT_SLOPE;
-    lowVoltageSlope   = NVM_LOW_VOLTAGE_SLOPE;
-    highVoltageSlope  = NVM_HIGH_VOLTAGE_SLOPE;    
-    lowCurrentOffset  = NVM_LOW_CURRENT_OFFSET;
-    highCurrentOffset = NVM_HIGH_CURRENT_OFFSET;
-    lowVoltageOffset  = NVM_LOW_VOLTAGE_OFFSET;
-    highVoltageOffset = NVM_HIGH_VOLTAGE_OFFSET - HIGH_VOLTAGE_DEFAULT_OFFSET;
+    set_parameters();
 }
 
 void i2c_reg_write(uint8_t regAddr, uint8_t dat0, uint8_t dat1)
@@ -253,6 +244,18 @@ void cal_offset()
     buf[4] = (int8_t)-(get_shunt_voltage(INA3221_BUSV_3) - HIGH_VOLTAGE_DEFAULT_OFFSET);
     
     HEFLASH_writeBlock(1, buf, FLASH_ROWSIZE);
+}
+
+void set_parameters() {
+    // Load parameters from HEF memory
+    lowCurrentSlope   = NVM_LOW_CURRENT_SLOPE;
+    highCurrentSlope  = NVM_HIGH_CURRENT_SLOPE;
+    lowVoltageSlope   = NVM_LOW_VOLTAGE_SLOPE;
+    highVoltageSlope  = NVM_HIGH_VOLTAGE_SLOPE;    
+    lowCurrentOffset  = NVM_LOW_CURRENT_OFFSET;
+    highCurrentOffset = NVM_HIGH_CURRENT_OFFSET;
+    lowVoltageOffset  = NVM_LOW_VOLTAGE_OFFSET;
+    highVoltageOffset = NVM_HIGH_VOLTAGE_OFFSET - HIGH_VOLTAGE_DEFAULT_OFFSET;
 }
 
 void blink_led(uint8_t cnt)

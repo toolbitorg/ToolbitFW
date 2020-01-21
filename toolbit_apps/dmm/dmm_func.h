@@ -18,6 +18,7 @@ float get_current();
 
 uint8_t selftest();
 void cal_offset();
+void set_parameters();
 void blink_led(uint8_t cnt);
 
 

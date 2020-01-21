@@ -48,10 +48,9 @@ typedef enum
     ATT_I2C0_RW_2BYTE    = 0x1403,
 
     // Product specific attribute ID
-    ATT_VOLTAGE_RANGE    = 0x8100,
+    ATT_CALIBRATION      = 0x8100,
     ATT_VOLTAGE          = 0x8101,
-	ATT_CURRENT_RANGE    = 0x8102,
-	ATT_CURRENT          = 0x8103
+	ATT_CURRENT          = 0x8102
 } AttributionID;
 
 /*
