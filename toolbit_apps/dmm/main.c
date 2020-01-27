@@ -87,6 +87,12 @@ int main(void) {
 
                             switch (id) {
                                 case ATT_VENDOR_NAME:
+                                  len = strlen(VENDOR_NAME) + 1; // +1 for NULL
+                                  TxDataBuffer[0] |= len + 3; // packet length
+                                  memcpy(&TxDataBuffer[3], VENDOR_NAME, len);
+                                  break;
+
+                                case ATT_VENDOR_NAME:
                                     len = strlen(VENDOR_NAME) + 1; // +1 for NULL
                                     TxDataBuffer[0] |= len + 3; // packet length
                                     memcpy(&TxDataBuffer[3], VENDOR_NAME, len);
@@ -103,7 +109,7 @@ int main(void) {
                                     TxDataBuffer[3] = '1' - PORTAbits.RA5;
                                     TxDataBuffer[4] = NULL;
                                     break;
- 
+
                                 case ATT_PRODUCT_SERIAL:
                                     TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
                                     memcpy(&TxDataBuffer[3], NVM_PRODUCT_SERIAL_ADDR, NVM_PRODUCT_SERIAL_SIZE);

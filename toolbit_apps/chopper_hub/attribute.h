@@ -35,11 +35,12 @@ typedef enum
 typedef enum
 {
 	// Toolbit common attribute ID
-	ATT_PRODUCT_NAME     = 0x0000,
-	ATT_PRODUCT_REVISION = 0x0001,
-	ATT_PRODUCT_SERIAL   = 0x0002,
-	ATT_FIRM_VERSION     = 0x0003,
-            
+    ATT_VENDOR_NAME      = 0x0000,
+    ATT_PRODUCT_NAME     = 0x0001,
+    ATT_PRODUCT_REVISION = 0x0002,
+    ATT_PRODUCT_SERIAL   = 0x0003,
+    ATT_FIRM_VERSION     = 0x0004,
+
     // Platform commom attribute ID
     ATT_GPIO_INOUT_MODE  = 0x1200,
     ATT_GPIO_RW          = 0x1203,
@@ -57,10 +58,17 @@ struct Attribution{
 };
  */
 
-static const ROMPTR char PRODUCT_NAME[]     = "CHOPPER HUB";
-static const ROMPTR char PRODUCT_REVISION[] = "0.2";
-static const ROMPTR char PRODUCT_SERIAL[]   = "SN0001";
+static const ROMPTR char VENDOR_NAME[]      = "Toolbit";
+static const ROMPTR char PRODUCT_NAME[]     = "Chopper HUB";
+static const ROMPTR char PRODUCT_REVISION[] = "0";
 static const ROMPTR char FIRM_VERSION[]     = "0.1";
 
-#endif	/* ATTRIBUTE_H__ */
+// The serial number provided by 'USB 512-Word DFU Bootloader for PIC16(L)F1454/5/9' as follows as
+//      0x81EE: one byte length
+//      0x81EF: one byte for string type
+//      0x81F0-0x81FF: 8 x 2 bytes for eight character UNICODE string
+#define NVM_PRODUCT_SERIAL_ADDR 0x81F0
+#define NVM_PRODUCT_SERIAL_SIZE 16
+static const ROMPTR char NVM_PRODUCT_SERIAL0 @ NVM_PRODUCT_SERIAL_ADDR;
 
+#endif	/* ATTRIBUTE_H__ */
