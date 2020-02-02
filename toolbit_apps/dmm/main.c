@@ -92,12 +92,6 @@ int main(void) {
                                   memcpy(&TxDataBuffer[3], VENDOR_NAME, len);
                                   break;
 
-                                case ATT_VENDOR_NAME:
-                                    len = strlen(VENDOR_NAME) + 1; // +1 for NULL
-                                    TxDataBuffer[0] |= len + 3; // packet length
-                                    memcpy(&TxDataBuffer[3], VENDOR_NAME, len);
-                                    break;
-
                                 case ATT_PRODUCT_NAME:
                                     len = strlen(PRODUCT_NAME) + 1; // +1 for NULL
                                     TxDataBuffer[0] |= len + 3; // packet length
@@ -111,8 +105,17 @@ int main(void) {
                                     break;
 
                                 case ATT_PRODUCT_SERIAL:
-                                    TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 3; // packet length
-                                    memcpy(&TxDataBuffer[3], NVM_PRODUCT_SERIAL_ADDR, NVM_PRODUCT_SERIAL_SIZE);
+                                    TxDataBuffer[0]  |= NVM_PRODUCT_SERIAL_SIZE + 1 + 3; // packet length  +1 for NULL
+                                    // Transfer 8bit char code instead on UNICODE
+                                    TxDataBuffer[3] = NVM_PRODUCT_SERIAL[0];
+                                    TxDataBuffer[4] = NVM_PRODUCT_SERIAL[1];
+                                    TxDataBuffer[5] = NVM_PRODUCT_SERIAL[2];
+                                    TxDataBuffer[6] = NVM_PRODUCT_SERIAL[3];
+                                    TxDataBuffer[7] = NVM_PRODUCT_SERIAL[4];
+                                    TxDataBuffer[8] = NVM_PRODUCT_SERIAL[5];
+                                    TxDataBuffer[9] = NVM_PRODUCT_SERIAL[6];
+                                    TxDataBuffer[10] = NVM_PRODUCT_SERIAL[7];
+                                    TxDataBuffer[11] = NULL;
                                     break;
 
                                 case ATT_FIRM_VERSION:

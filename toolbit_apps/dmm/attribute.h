@@ -72,8 +72,8 @@ static const ROMPTR char FIRM_VERSION[]     = "0.1";
 //      0x81EF: one byte for string type
 //      0x81F0-0x81FF: 8 x 2 bytes for eight character UNICODE string
 #define NVM_PRODUCT_SERIAL_ADDR 0x81F0
-#define NVM_PRODUCT_SERIAL_SIZE 16
-static const ROMPTR char NVM_PRODUCT_SERIAL0 @ NVM_PRODUCT_SERIAL_ADDR;
+#define NVM_PRODUCT_SERIAL_SIZE 8
+static const ROMPTR uint16_t NVM_PRODUCT_SERIAL[] @ NVM_PRODUCT_SERIAL_ADDR;
 
 
 #endif	/* ATTRIBUTE_H__ */
