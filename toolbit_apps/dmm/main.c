@@ -136,6 +136,11 @@ int main(void) {
                                     TxDataBuffer[3] = dat;
                                     break;
 
+                                case ATT_CALIBRATION:
+                                    TxDataBuffer[0] |= NVM_NUM_OF_BYTE_DATA + 3; // packet length
+                                    memcpy(&TxDataBuffer[3], NVM_ADDR, NVM_NUM_OF_BYTE_DATA);
+                                    break;
+
                                 case ATT_VOLTAGE:
                                     TxDataBuffer[0] |= 4 + 3; // packet length
                                     float volt = get_voltage();
