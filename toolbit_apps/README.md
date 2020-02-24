@@ -50,7 +50,7 @@ In details, please refer to usage of [USB DFU Bootloader for PIC16F1454/5/9](htt
 
 Please refer to [the top page](https://github.com/toolbitorg/ToolbitFW) of this repository:
 
-# Licence
+# License
 
 - Source code in [dmm](dmm) and [chopper_hub](chopper_hub) folders is distributed in [GNU General Public License version 2.0](LICENSE)
 - This software includes the work that is distributed in the Apache License 2.0

@@ -21,7 +21,7 @@ As for products using this firmware, please see the following pages:
   - [HEFlash.h](toolbit_apps/lib/HEFlash.h), [HEFlash.c](toolbit_apps/lib/HEFlash.c): High Endurance Flash - EEPROM emulation and support routines
   - Please follow their license agreement
 
-# Licence
+# License
 
 Please refer to the following and source files in this repository.
 
