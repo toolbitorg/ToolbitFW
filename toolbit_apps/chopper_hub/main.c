@@ -1,29 +1,18 @@
 /*
- * Chopper HUB
- * 
- * This program is based on M-Stack and USB HID Mouse released by
- * Signal 11 Software
- */
-
-/*
- * USB HID Mouse
+ *  Chopper HUB firmware
+ *  Copyright (C) 2020 Junji Ohama <junji.ohama@toolbit.org>
  *
- * This file may be used by anyone for any purpose and may be used as a
- * starting point making your own application using M-Stack.
+ *  This program is distributed in the hope that it will be useful, but WITHOUT
+ *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ *  more details.
  *
- * It is worth noting that M-Stack itself is not under the same license as
- * this file.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, see <http://www.gnu.org/licenses>
  *
- * M-Stack is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  For details, see sections 7, 8, and 9
- * of the Apache License, version 2.0 which apply to this file.  If you have
- * purchased a commercial license for this software from Signal 11 Software,
- * your commerical license superceeds the information in this header.
+ *  This program is based on USB HID Mouse that is distributed in
+ *  the Apache License 2.0 by Alan Ott, Signal 11 Software.
  *
- * Alan Ott
- * Signal 11 Software
- * 2013-08-13
  */
 
 #include "usb.h"
@@ -49,7 +38,7 @@ void chopper_init()
     ANSELC = 0x00;
     PORTC = 0x00;
     TRISC = 0xC8;  // RC0, RC1, RC2, RC4, RC5 are output pins for now
-    
+
     // interrupt setting for over current protection
     LATA = 0x00;
     ANSELA = 0x00;
@@ -58,12 +47,12 @@ void chopper_init()
 
     WPUA = 0x38;   // Enable weak pull-up of RA3, RA4, RA5
     OPTION_REGbits.nWPUEN = 0;
-    
+
     IOCAP = 0x00;
     IOCAN = 0x30;  // RA4, RA5 are set as negative edge interrupt pins
     IOCAF = 0x00;  // Clear flags
     // Enable interrupt-on-change
-    INTCONbits.IOCIE = 1; 
+    INTCONbits.IOCIE = 1;
     INTCONbits.PEIE = 1;
     INTCONbits.GIE = 1;
 }
@@ -102,14 +91,14 @@ int main(void) {
     portCtrl[3] = 0x00;
 
     hardware_init();
-    
+
     chopper_init();
 
 #ifdef MULTI_CLASS_DEVICE
     hid_set_interface_list(hid_interfaces, sizeof (hid_interfaces));
 #endif
     usb_init();
-    
+
     while (1) {
         if (usb_is_configured() && usb_out_endpoint_has_data(1)) {
 
@@ -139,14 +128,14 @@ int main(void) {
                         case OP_ATT_VALUE_GET:
                             TxDataBuffer[2] = RC_OK; // Return OK code
                             TxDataBuffer[0] = PROTOCOL_VERSION;
-                            
+
                             switch (id) {
                                 case ATT_VENDOR_NAME:
                                     len = strlen(VENDOR_NAME) + 1; // +1 for NULL
                                     TxDataBuffer[0] |= len + 3; // packet length
                                     memcpy(&TxDataBuffer[3], VENDOR_NAME, len);
                                     break;
-                                    
+
                                  case ATT_PRODUCT_NAME:
                                     len = strlen(PRODUCT_NAME) + 1; // +1 for NULL
                                     TxDataBuffer[0] |= len + 3; // packet length
@@ -169,7 +158,7 @@ int main(void) {
                                     TxDataBuffer[0] |= len + 3; // packet length
                                     memcpy(&TxDataBuffer[3], FIRM_VERSION, len);
                                     break;
-                                    
+
                                 case ATT_USB_PORT_CTRL:
                                     TxDataBuffer[0] |= 4 + 3; // packet length
                                     TxDataBuffer[3] = portCtrl[0];
@@ -191,12 +180,12 @@ int main(void) {
                                     TxDataBuffer[4] = PORTA;
                                     TxDataBuffer[5] = 0;
                                     TxDataBuffer[6] = 0;
-                                
+
                                 default:
                                     TxDataBuffer[0] |= 3; // packet length
                                     TxDataBuffer[2] = RC_FAIL; // Return error code
                                     break;
-                                    
+
                             } // end of switch (id)
                             break;
 
@@ -206,14 +195,14 @@ int main(void) {
 
                             switch (id) {
                                 uint8_t out;
-                                        
+
                                 case ATT_USB_PORT_CTRL:
                                     out = PORTC & 0xFC;
                                     portCtrl[0] = RxDataBuffer[4];
                                     if (!(portCtrl[0] & 0x01)) // Check port 2
-                                        out = out | 0x2; 
+                                        out = out | 0x2;
                                     if (!(portCtrl[0] & 0x02)) // Check port 1
-                                        out = out | 0x1; 
+                                        out = out | 0x1;
                                     PORTC = out;
                                     //portCtrl[1] = RxDataBuffer[5];
                                     //portCtrl[2] = RxDataBuffer[6];
@@ -223,7 +212,7 @@ int main(void) {
                                 case ATT_GPIO_INOUT_MODE:
                                     TRISC = TRISC & ~GPIO_PORTC_MASK | cnvAtt2Reg(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
                                     break;
-                                    
+
                                 case ATT_GPIO_RW:
                                     PORTC = PORTC & ~GPIO_PORTC_MASK | cnvAtt2Reg(RxDataBuffer[4]) & GPIO_PORTC_MASK; // Change RC2, RC4, RC5 bits
                                     break;
@@ -234,7 +223,7 @@ int main(void) {
 
                             } // end of switch (id)
                             break;
-                            
+
                         default:
                             TxDataBuffer[0] = PROTOCOL_VERSION | 3; // packet length
                             TxDataBuffer[2] = RC_FAIL; // Return error code
@@ -247,7 +236,7 @@ int main(void) {
                     usb_send_in_buffer(1, EP_1_IN_LEN);
 
                 } // end of if (pcktVer == PROTOCOL_VERSION && pcktLen > 1)
-            }            
+            }
             usb_arm_out_endpoint(1);
         }
 

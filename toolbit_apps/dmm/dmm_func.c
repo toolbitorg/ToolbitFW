@@ -1,3 +1,17 @@
+/*
+ *  Toolbit DMM firmware
+ *  Copyright (C) 2020 Junji Ohama <junji.ohama@toolbit.org>
+ *
+ *  This program is distributed in the hope that it will be useful, but WITHOUT
+ *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ *  more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, see <http://www.gnu.org/licenses>
+ *
+ */
+
 #include "dmm_func.h"
 #include "hardware.h"
 #include "i2c-lib.h"
@@ -40,7 +54,7 @@
 
 #define INA3221_DIE_ID_VAL 0x3220
 
-#define CURRENT_RANGE_THRESHOULD  187    // Low/High threshould 150mA / 0.80mA/bit = 187.5   
+#define CURRENT_RANGE_THRESHOULD  187    // Low/High threshould 150mA / 0.80mA/bit = 187.5
 #define CURRENT_RANGE_THRESHOULD0 0x06   // Change burden threshould 160mA = 0xC8; 0xC8 << 3 = 0x0640
 #define CURRENT_RANGE_THRESHOULD1 0x40
 #define VOLTAGE_RANGE_THRESHOULD  4080
@@ -68,10 +82,10 @@
 
 #define CAL_DONE      0x00
 #define CAL_NOT_DONE  0xFF   // 0xFF means calibration is not executed yet
-static const ROMPTR uint8_t NVM_CAL_DONE @ NVM_CAL_DONE_ADDR = CAL_NOT_DONE; 
+static const ROMPTR uint8_t NVM_CAL_DONE @ NVM_CAL_DONE_ADDR = CAL_NOT_DONE;
 
 static const ROMPTR float  NVM_LOW_CURRENT_SLOPE   @ NVM_LOW_CURRENT_SLOPE_ADDR   = 0.000040;    // 40.0uA/bit
-static const ROMPTR int8_t NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR  = 0; 
+static const ROMPTR int8_t NVM_LOW_CURRENT_OFFSET  @ NVM_LOW_CURRENT_OFFSET_ADDR  = 0;
 static const ROMPTR float  NVM_HIGH_CURRENT_SLOPE  @ NVM_HIGH_CURRENT_SLOPE_ADDR  = 0.00080;     // 0.80mA/bit
 static const ROMPTR int8_t NVM_HIGH_CURRENT_OFFSET @ NVM_HIGH_CURRENT_OFFSET_ADDR = 0;
 static const ROMPTR float  NVM_LOW_VOLTAGE_SLOPE   @ NVM_LOW_VOLTAGE_SLOPE_ADDR   = -0.0015214;  // 1.5214 mV/bit
@@ -94,7 +108,7 @@ int16_t highVoltageOffset;
 
 void dmm_init() {
     uint8_t errcode;
-    
+
     LATC = 0x0;
     ANSELC = 0x00;  // All pins are set as digital I/O
     PORTC = 0x00;
@@ -105,12 +119,12 @@ void dmm_init() {
     OPTION_REGbits.nWPUEN = 0;
 
     i2c_enable();
-    
+
     if(NVM_CAL_DONE==CAL_NOT_DONE) {
         // This test runs when booting up the first time to assume that voltage and current inputs are open
         errcode = selftest();
         if(errcode>0) {
-            blink_led(errcode);  // Show test result by LED blink                
+            blink_led(errcode);  // Show test result by LED blink
         } else {
             cal_offset();
         }
@@ -136,9 +150,9 @@ uint16_t i2c_reg_read(uint8_t regAddr)
     i2c_start();
     i2c_send_byte(I2C_INA_ADDR << 1 | I2C_WRITE_CMD);
     i2c_send_byte(regAddr);
-    i2c_repeat_start();                        
+    i2c_repeat_start();
     i2c_send_byte(I2C_INA_ADDR << 1 | I2C_READ_CMD);
-    dat = i2c_read_byte(1) << 8; 
+    dat = i2c_read_byte(1) << 8;
     dat |= i2c_read_byte(1);
     i2c_stop();
     return dat;
@@ -150,7 +164,7 @@ int16_t get_shunt_voltage(uint8_t regAddr)
         uint16_t uint16;
         int16_t  int16;
     } vshunt;
-    
+
     vshunt.uint16 = i2c_reg_read(regAddr);
     return vshunt.int16 >> 3;
 }
@@ -174,7 +188,7 @@ float get_voltage()
 float get_current()
 {
     int16_t val = get_shunt_voltage(INA3221_SHUNTV_2);
-    
+
     if(val<CURRENT_RANGE_THRESHOULD && val>-CURRENT_RANGE_THRESHOULD)
         return (get_shunt_voltage(INA3221_SHUNTV_1) + lowCurrentOffset) * lowCurrentSlope;
     else
@@ -198,14 +212,14 @@ float get_current()
 #define LOW_CURRENT_OFFSET_MIN   -3
 
 uint8_t selftest()
-{    
+{
     int16_t val;
-    
+
     // Test I2C access to INA3221
     if(i2c_reg_read(INA3221_DIE_ID) != INA3221_DIE_ID_VAL) {
         return I2C_READ_ERROR;
     }
-        
+
     if(NVM_CAL_DONE==CAL_NOT_DONE) {
 
         // Check voltage offset
@@ -236,13 +250,13 @@ void cal_offset()
 {
     int8_t buf[FLASH_ROWSIZE];
     int16_t val;
-         
+
     buf[0] = CAL_DONE;
     buf[1] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_1);
     buf[2] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_2);
-    buf[3] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_3);    
+    buf[3] = (int8_t)-get_shunt_voltage(INA3221_SHUNTV_3);
     buf[4] = (int8_t)-(get_shunt_voltage(INA3221_BUSV_3) - HIGH_VOLTAGE_DEFAULT_OFFSET);
-    
+
     HEFLASH_writeBlock(1, buf, FLASH_ROWSIZE);
 }
 
@@ -251,7 +265,7 @@ void set_parameters() {
     lowCurrentSlope   = NVM_LOW_CURRENT_SLOPE;
     highCurrentSlope  = NVM_HIGH_CURRENT_SLOPE;
     lowVoltageSlope   = NVM_LOW_VOLTAGE_SLOPE;
-    highVoltageSlope  = NVM_HIGH_VOLTAGE_SLOPE;    
+    highVoltageSlope  = NVM_HIGH_VOLTAGE_SLOPE;
     lowCurrentOffset  = NVM_LOW_CURRENT_OFFSET;
     highCurrentOffset = NVM_HIGH_CURRENT_OFFSET;
     lowVoltageOffset  = NVM_LOW_VOLTAGE_OFFSET;
@@ -265,5 +279,5 @@ void blink_led(uint8_t cnt)
         __delay_ms(1000); // 1 sec delay
         LED1_OFF();
         __delay_ms(1000); // 1 sec delay
-    }         
+    }
 }

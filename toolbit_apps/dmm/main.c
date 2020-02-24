@@ -1,29 +1,18 @@
 /*
- * Toolbit DMM
+ *  Toolbit DMM firmware
+ *  Copyright (C) 2020 Junji Ohama <junji.ohama@toolbit.org>
  *
- * This program is based on M-Stack and USB HID Mouse released by
- * Signal 11 Software
- */
-
-/*
- * USB HID Mouse
+ *  This program is distributed in the hope that it will be useful, but WITHOUT
+ *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ *  more details.
  *
- * This file may be used by anyone for any purpose and may be used as a
- * starting point making your own application using M-Stack.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, see <http://www.gnu.org/licenses>
  *
- * It is worth noting that M-Stack itself is not under the same license as
- * this file.
+ *  This program is based on USB HID Mouse that is distributed in
+ *  the Apache License 2.0 by Alan Ott, Signal 11 Software.
  *
- * M-Stack is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  For details, see sections 7, 8, and 9
- * of the Apache License, version 2.0 which apply to this file.  If you have
- * purchased a commercial license for this software from Signal 11 Software,
- * your commerical license superceeds the information in this header.
- *
- * Alan Ott
- * Signal 11 Software
- * 2013-08-13
  */
 
 #include "usb.h"
