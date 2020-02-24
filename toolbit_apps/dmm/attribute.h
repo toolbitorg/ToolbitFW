@@ -78,7 +78,7 @@ struct Attribution{
 
 static const ROMPTR char VENDOR_NAME[]      = "Toolbit";
 static const ROMPTR char PRODUCT_NAME[]     = "DMM";
-static const ROMPTR char FIRM_VERSION[]     = "0.1";
+static const ROMPTR char FIRM_VERSION[]     = "1.0";
 // If PA5 input is high/low, PRODUCT_REVISION = 0/1
 
 // The serial number provided by 'USB 512-Word DFU Bootloader for PIC16(L)F1454/5/9' as follows as
