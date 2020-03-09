@@ -57,7 +57,7 @@
 #define CURRENT_RANGE_THRESHOULD  187    // Low/High threshould 150mA / 0.80mA/bit = 187.5
 #define CURRENT_RANGE_THRESHOULD0 0x06   // Change burden threshould 160mA = 0xC8; 0xC8 << 3 = 0x0640
 #define CURRENT_RANGE_THRESHOULD1 0x40
-#define VOLTAGE_RANGE_THRESHOULD  4080
+#define VOLTAGE_RANGE_THRESHOULD  4080   // Low/High threshould 6207mV / 1.5214mV/bit = 4080
 
 // High-Endurance Flash memory map
 // Block0 0x1F80-0x1F9F : Slope parameters
